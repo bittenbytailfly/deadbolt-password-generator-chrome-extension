@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+<html> 
+  <head>
+    <title>Deadbolt</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <style>
+        body { padding-top: 5em; }
+        #entry { width: 550px; }
+        .pinNumber select { width: 4em; }
+    </style>
+  </head>
+  <body>
+  
+  <p>
+  <button type="button" class="btn btn-primary" data-bind="click: createProfile">Add Profile</button>
+  <button type="button" class="btn btn-primary" data-bind="click: save">Save</button>
+  </p>
+
+      <div class="tabbable"> <!-- Only required for left/right tabs -->
+        <ul id="profileTabs" class="nav nav-tabs">
+            
+            <!-- ko foreach: profiles -->
+            
+            <li><a data-toggle="tab" data-bind="text: name, attr: { 'href': '#tab' + $index() }"></a></li>
+            
+            <!-- /ko -->
+
+        </ul>
+        <div class="tab-content">
+            
+            <!-- ko foreach: profiles -->
+
+            <div class="tab-pane" data-bind="attr: { 'id': 'tab' + $index() }">
+          
+                
+
+                <div class="form-horizontal">
+
+                    <div class="control-group">
+                        <label class="control-label" for="txtProfile1Name">Name</label>
+                        <div class="controls">
+                            <input type="text" id="txtProfile1Name" data-bind="value: name, valueUpdate: 'afterkeydown'" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="inputEmail">Include Symbols</label>
+                        <div class="controls">
+                            <div class="btn-group">
+                                <button type="button" class="btn" data-bind="click: toggleIncludeSymbols, css: { active: includeSymbols }">Yes</button>
+                                <button type="button" class="btn" data-bind="click: toggleIncludeSymbols, css: { active: !includeSymbols() }">No</button>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="control-group">
+                        <label class="control-label" for="inputPassword">Mask Phrase</label>
+                        <div class="controls">
+                            <div class="btn-group" data-toggle="buttons-radio">
+                                <button type="button" class="btn" data-bind="click: toggleMaskPhrase, css: { active: maskPhrase }">Yes</button>
+                                <button type="button" class="btn" data-bind="click: toggleMaskPhrase, css: { active: !maskPhrase() }">No</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="inputPassword">Case Sensitive</label>
+                        <div class="controls">
+                            <div class="btn-group" data-toggle="buttons-radio">
+                                <button type="button" class="btn" data-bind="click: toggleCaseSensitive, css: { active: caseSensitive }">Yes</button>
+                                <button type="button" class="btn" data-bind="click: toggleCaseSensitive, css: { active: !caseSensitive() }">No</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="inputPassword">Use Pin Number</label>
+                        <div class="controls">
+                            <div class="btn-group" data-toggle="buttons-radio">
+                                <button type="button" class="btn" data-bind="click: toggleUsePinNumber, css: { active: usePinNumber }">Yes</button>
+                                <button type="button" class="btn" data-bind="click: toggleUsePinNumber, css: { active: !usePinNumber() }">No</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group" data-bind="visible: usePinNumber">
+                        <label class="control-label" for="inputPassword">Pin Number</label>
+                        <div class="controls pinNumber">
+                            <select data-bind="value: pin1">
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                            </select>
+                            <select data-bind="value: pin2">
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                            </select>
+                            <select data-bind="value: pin3">
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                            </select>
+                            <select data-bind="value: pin4">
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                            </select>
+                        </div>
+                    </div>
+  
+                </div>
+
+            </div>
+            
+            <!-- /ko -->
+            
+           
+
+        </div>
+    </div>
+
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/knockout-2.2.0.min.js"></script>
+
+    <script type="text/javascript">
+
+        function simpleProfile(name, includeSymbols, maskPhrase, caseSensitive, usePinNumber, pin1, pin2, pin3, pin4) {
+            this.name = name;
+            this.includeSymbols = includeSymbols;
+            this.maskPhrase = maskPhrase;
+            this.caseSensitive = caseSensitive;
+            this.usePinNumber = usePinNumber;
+            this.pin1 = pin1;
+            this.pin2 = pin2;
+            this.pin3 = pin3;
+            this.pin4 = pin4;
+        }
+
+        function profile(name, includeSymbols, maskPhrase, caseSensitive, usePinNumber, pin1, pin2, pin3, pin4) {
+            var self = this;
+            self.name = ko.observable(name);
+            self.includeSymbols = ko.observable(includeSymbols);
+            self.maskPhrase = ko.observable(maskPhrase);
+            self.caseSensitive = ko.observable(caseSensitive);
+            self.usePinNumber = ko.observable(usePinNumber);
+            self.pin1 = ko.observable(pin1);
+            self.pin2 = ko.observable(pin2);
+            self.pin3 = ko.observable(pin3);
+            self.pin4 = ko.observable(pin4);
+
+            self.pinNumber = ko.computed(function() {
+                return self.pin1() + self.pin2() + self.pin3() + self.pin4();
+            }, self);
+
+            self.toggleIncludeSymbols = function (data, event) {
+                self.includeSymbols(self.toggle(event.srcElement.outerText));
+            };
+
+            self.toggleMaskPhrase = function (data, event) {
+                self.maskPhrase(self.toggle(event.srcElement.outerText));
+            };
+
+            self.toggleCaseSensitive = function (data, event) {
+                self.caseSensitive(self.toggle(event.srcElement.outerText));
+            };
+
+            self.toggleUsePinNumber = function (data, event) {
+                self.usePinNumber(self.toggle(event.srcElement.outerText));
+            };
+
+            self.toggle = function(val) {
+                return val == 'Yes' ? true : false;
+            };
+        }
+
+        function profileSelection() {
+            var self = this;
+            self.profiles = ko.observableArray();
+            self.createProfile = function () {
+                var p = new profile('Profile ' + (self.profiles().length + 1), false, false, false, false, '0', '0', '0', '0');
+                self.profiles.push(p);
+                $('#profileTabs a:last').tab('show'); 
+            };
+            self.addProfile = function (p) {
+                self.profiles.push(p);
+            };
+            self.save = function () {
+                var simpleProfileList = new Array();
+                
+                for (var i = 0; i < self.profiles().length; i++) {
+                    var p = self.profiles()[i];
+                    console.log(p.name);
+                    simpleProfileList.push(new simpleProfile(p.name(), p.includeSymbols(), p.maskPhrase(), p.caseSensitive(), p.usePinNumber(), p.pin1(), p.pin2(), p.pin3(), p.pin4()));
+                }
+                window.localStorage.setItem('profileList', JSON.stringify(simpleProfileList));
+            };
+        }
+
+        var simpleProfileList = window.localStorage.getItem('profileList');
+        if (!simpleProfileList) {
+            var simpleProfileList = new Array();
+            var defaultSimpleProfile = new simpleProfile('Profile 1', false, false, false, false, '0', '0', '0', '0');
+            simpleProfileList.push(defaultSimpleProfile);
+            window.localStorage.setItem('profileList', JSON.stringify(simpleProfileList));
+        }
+
+        var viewModel = new profileSelection();
+
+        var savedProfiles = JSON.parse(window.localStorage.getItem('profileList'));
+        for (var i = 0; i < savedProfiles.length; i++) {
+            console.log(savedProfiles[i]);
+            var p = savedProfiles[i];
+            viewModel.addProfile(new profile(p.name, p.includeSymbols, p.maskPhrase, p.caseSensitive, p.usePinNumber, p.pin1, p.pin2, p.pin3, p.pin4));
+        }
+
+        ko.applyBindings(viewModel);
+        $('#profileTabs a:first').tab('show'); 
+
+    </script>
+
+  </body>
+</html>

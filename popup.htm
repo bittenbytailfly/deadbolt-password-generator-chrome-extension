@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html> 
+  <head>
+    <title>Deadbolt</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <style>
+		.panel {
+			width: 200px;
+			height: 200px;
+			position: relative;
+			-webkit-perspective: 1000;
+		}
+		.panel .front {
+			z-index: 900;
+
+			-webkit-transform: rotateX(0deg) rotateY(0deg);
+			-webkit-transform-style: preserve-3d;
+			-webkit-backface-visibility: hidden;
+
+			-webkit-transition: all .7s ease-in-out;
+		}
+		.panel.flip .front {
+			z-index: 900;
+			-webkit-transform: rotateY(180deg);
+		}
+		.front, .back 
+		{
+		    background: #ccc;
+		    float: none;
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 900;
+			width: inherit;
+			height: inherit;
+			-webkit-border-radius: 1em;
+			-webkit-box-shadow: 0px 0px 10px 2px #888;
+		}
+		.panel .back {
+			z-index: 800;
+			
+			-webkit-transform: rotateY(-180deg);
+			-webkit-transform-style: preserve-3d;
+			-webkit-backface-visibility: hidden;
+
+			-webkit-transition: all .7s ease-in-out;
+		}
+		
+		.panel.flip .back {
+			z-index: 1000;
+
+			-webkit-transform: rotateX(0deg) rotateY(0deg);
+
+		}
+		
+		/* -- X axis rotation for click panel -- */
+		.click .front {
+			-webkit-transform: rotateX(0deg);
+		}
+		.click.flip .front {
+			-webkit-transform: rotateX(180deg);
+		}
+		.click .back {
+			-webkit-transform: rotateX(-180deg);
+		}
+		.click.flip .back {
+			-webkit-transform: rotateX(0deg);
+		}
+    </style>
+  </head>
+  <body>
+    
+    <div class="click panel circle" data-bind="css: { 'flip': showingPassword }">
+	    <div class="front">
+		    <h2>Click or tap this circle!</h2>
+	    </div>
+	    <div class="back">
+		    <h2>Tap Again!</h2>
+	    </div>
+    </div>
+
+    <input type="button" data-bind="click: toggleReveal" value="flip it!" />
+
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/knockout-2.2.0.min.js"></script>
+
+    <script type="text/javascript">
+
+        var deadbolt = function() {
+            var self = this;
+            self.profileIndex = ko.observable(0);
+            self.phrase = ko.observable('');
+            self.showingPassword = ko.observable(false);
+
+            self.toggleReveal = function() {
+                self.showingPassword(!self.showingPassword());
+            };
+        };
+
+        var viewModel = new deadbolt();
+        ko.applyBindings(viewModel);
+
+    </script>
+
+  </body>
+</html>
