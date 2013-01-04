@@ -1,0 +1,19 @@
+﻿*
+{
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+html
+{
+}
+body
+{
+    margin: 0px;
+    border: none;
+}
+iframe
+{
+    border: 0;
+    display: block;
+}
