@@ -85,6 +85,7 @@ function profileSelection() {
         var p = new profile('Profile ' + (self.profiles().length + 1), false, false, false, false, '0', '0', '0', '0', this);
         self.profiles.push(p);
         $('#profileTabs a:last').tab('show');
+        self.changesMade(true);
     };
     self.addProfile = function (p) {
         self.profiles.push(p);

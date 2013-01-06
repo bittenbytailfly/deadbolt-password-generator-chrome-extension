@@ -6,17 +6,6 @@
     border-radius: 5px;
 }
 
-h1 span
-{
-    display: none;
-}
-
-h1
-{
-    width: 200px;
-    height: 90px;
-}
-
 dl
 {
     margin: 0;
