@@ -30,17 +30,21 @@
   </head>
   <body>
   
-  <p>
+  <div class="well">
   <button type="button" class="btn btn-primary" data-bind="click: createProfile">Add Profile</button>
-  <button type="button" class="btn btn-primary" data-bind="click: save">Save</button>
-  </p>
+  </div>
 
       <div class="tabbable"> <!-- Only required for left/right tabs -->
         <ul id="profileTabs" class="nav nav-tabs">
             
             <!-- ko foreach: profiles -->
             
-            <li><a data-toggle="tab" data-bind="text: name, attr: { 'href': '#tab' + $index() }"></a></li>
+            <li>
+                <a data-toggle="tab" data-bind="attr: { 'href': '#tab' + $index() }">
+                    <span class="close" data-bind="click: function() { $parent.removeProfile($data, $index()); }, visible: $index() != 0">&times;</span>
+                    <span data-bind="html: name"></span>&nbsp;
+                </a>
+            </li>
             
             <!-- /ko -->
 
@@ -50,8 +54,6 @@
             <!-- ko foreach: profiles -->
 
             <div class="tab-pane" data-bind="attr: { 'id': 'tab' + $index() }">
-          
-                
 
                 <div class="form-horizontal">
 
@@ -162,9 +164,13 @@
             
             <!-- /ko -->
             
-           
-
         </div>
+
+        <div class="well" data-bind="visible: changesMade">
+            <button type="button" class="btn btn-primary" data-bind="click: save">Save</button>
+            Your changes have not yet been saved
+        </div>
+
     </div>
 
     <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>

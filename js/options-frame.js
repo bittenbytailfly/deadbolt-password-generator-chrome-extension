@@ -25,7 +25,7 @@ window.addEventListener('message', function (event) {
     }
 }, false);
 
-function profile(name, includeSymbols, maskPhrase, caseSensitive, usePinNumber, pin1, pin2, pin3, pin4) {
+function profile(name, includeSymbols, maskPhrase, caseSensitive, usePinNumber, pin1, pin2, pin3, pin4, parent) {
     var self = this;
     self.name = ko.observable(name);
     self.includeSymbols = ko.observable(includeSymbols);
@@ -36,6 +36,7 @@ function profile(name, includeSymbols, maskPhrase, caseSensitive, usePinNumber, 
     self.pin2 = ko.observable(pin2);
     self.pin3 = ko.observable(pin3);
     self.pin4 = ko.observable(pin4);
+    self.parent = parent;
 
     self.pinNumber = ko.computed(function () {
         return self.pin1() + self.pin2() + self.pin3() + self.pin4();
@@ -60,18 +61,47 @@ function profile(name, includeSymbols, maskPhrase, caseSensitive, usePinNumber, 
     self.toggle = function (val) {
         return val == 'Yes' ? true : false;
     };
+
+    self.markChange = function () {
+        parent.changesMade(true);
+    };
+
+    self.name.subscribe(function() { self.markChange(); });
+    self.includeSymbols.subscribe(function () { self.markChange(); });
+    self.maskPhrase.subscribe(function () { self.markChange(); });
+    self.caseSensitive.subscribe(function () { self.markChange(); });
+    self.usePinNumber.subscribe(function () { self.markChange(); });
+    self.pin1.subscribe(function () { self.markChange(); });
+    self.pin2.subscribe(function () { self.markChange(); });
+    self.pin3.subscribe(function () { self.markChange(); });
+    self.pin4.subscribe(function () { self.markChange(); });
 }
 
 function profileSelection() {
     var self = this;
     self.profiles = ko.observableArray();
+    self.changesMade = ko.observable(false);
     self.createProfile = function () {
-        var p = new profile('Profile ' + (self.profiles().length + 1), false, false, false, false, '0', '0', '0', '0');
+        var p = new profile('Profile ' + (self.profiles().length + 1), false, false, false, false, '0', '0', '0', '0', this);
         self.profiles.push(p);
         $('#profileTabs a:last').tab('show');
     };
     self.addProfile = function (p) {
         self.profiles.push(p);
+    };
+    self.removeProfile = function (profile, i) {
+        self.changesMade(true);
+        self.profiles.remove(profile);
+        var newSelectedTab = 0;
+        if ($("#profileTabs li").size() == i) {
+            console.log('equal');
+            newSelectedTab = $('#profileTabs a:last');
+        }
+        else {
+            console.log('here');
+            newSelectedTab = $('#profileTabs li:eq(' + (i) + ') a')
+        }
+        newSelectedTab.tab('show');
     };
     self.save = function () {
         var simpleProfileList = new Array();
@@ -86,6 +116,7 @@ function profileSelection() {
             context: { profiles: simpleProfileList }
         };
         parent.postMessage(message, '*');
+        self.changesMade(false);
     };
 }
 
@@ -94,7 +125,7 @@ function main(profiles) {
 
     for (var i = 0; i < profiles.length; i++) {
         var p = profiles[i];
-        viewModel.addProfile(new profile(p.name, p.includeSymbols, p.maskPhrase, p.caseSensitive, p.usePinNumber, p.pin1, p.pin2, p.pin3, p.pin4));
+        viewModel.addProfile(new profile(p.name, p.includeSymbols, p.maskPhrase, p.caseSensitive, p.usePinNumber, p.pin1, p.pin2, p.pin3, p.pin4, viewModel));
     }
 
     ko.applyBindings(viewModel);
