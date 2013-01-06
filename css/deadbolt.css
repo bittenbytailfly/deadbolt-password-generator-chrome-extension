@@ -52,7 +52,7 @@ dl:first-child
 
 #fullPassword, dd
 {
-    font-family: Courier;
+    font-family: Courier New, Courier, Terminal;
     font-weight: bold;
 }
 
