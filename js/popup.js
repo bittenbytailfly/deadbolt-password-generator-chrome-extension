@@ -30,7 +30,7 @@ window.addEventListener('message', function (event) {
             break;
         case 'aboutPageRequested':
             chrome.tabs.create({
-                url: 'http://www.deadboltpasswordgenerator.com/faq'
+                url: 'http://www.deadboltpasswordgenerator.com/'
             });
             break;
         case 'copyPasswordToClipboard':
