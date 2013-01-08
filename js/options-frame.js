@@ -1,4 +1,4 @@
-﻿//    Copyright 2012, 2013 Ed Carter
+//    Copyright 2012, 2013 Ed Carter
 //
 //    This file is part of Deadbolt Password Generator.
 //
@@ -95,11 +95,9 @@ function profileSelection() {
         self.profiles.remove(profile);
         var newSelectedTab = 0;
         if ($("#profileTabs li").size() == i) {
-            console.log('equal');
             newSelectedTab = $('#profileTabs a:last');
         }
         else {
-            console.log('here');
             newSelectedTab = $('#profileTabs li:eq(' + (i) + ') a')
         }
         newSelectedTab.tab('show');

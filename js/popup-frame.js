@@ -1,4 +1,4 @@
-﻿//    Copyright 2012, 2013 Ed Carter
+//    Copyright 2012, 2013 Ed Carter
 //
 //    This file is part of Deadbolt Password Generator.
 //
@@ -41,6 +41,7 @@ var deadbolt = function (profiles) {
     self.revealPassword = function () {
         self.showingPassword(true);
         self.password(encodePassword(self.phrase(), self.selectedProfile().pin1 + self.selectedProfile().pin2 + self.selectedProfile().pin3 + self.selectedProfile().pin4, self.selectedProfile().includeSymbols, self.selectedProfile().caseSensitive));
+        self.notifyAnalyticsEvent('Revealed');
     };
 
     self.settingsChangeRequested = function () {
@@ -65,12 +66,12 @@ var deadbolt = function (profiles) {
     self.copyToClipboard = function () {
         self.copiedToClipboard(true);
         self.password(encodePassword(self.phrase(), self.selectedProfile().pin1 + self.selectedProfile().pin2 + self.selectedProfile().pin3 + self.selectedProfile().pin4, self.selectedProfile().includeSymbols, self.selectedProfile().caseSensitive));
-        console.log(self.password());
         var message = {
             command: 'copyPasswordToClipboard',
             context: { password: self.password() }
         };
         parent.postMessage(message, '*');
+        self.notifyAnalyticsEvent('Copied');
     };
 
     self.buttonsEnabled = ko.computed(function () {
@@ -95,6 +96,14 @@ var deadbolt = function (profiles) {
     self.passwordGenerated = ko.computed(function () {
         return self.password().length > 0;
     });
+    
+    self.notifyAnalyticsEvent = function(method) {
+        var message = {
+            command: 'passwordGenerated',
+            context: { selectedProfile: self.selectedProfile(), method: method }
+        };
+        parent.postMessage(message, '*');
+    }
 };
 
 function main(profiles) {

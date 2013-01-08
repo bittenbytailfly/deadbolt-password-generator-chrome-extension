@@ -1,4 +1,4 @@
-﻿//    Copyright 2012, 2013 Ed Carter
+//    Copyright 2012, 2013 Ed Carter
 //
 //    This file is part of Deadbolt Password Generator.
 //
@@ -34,16 +34,24 @@ window.addEventListener('message', function (event) {
             });
             break;
         case 'copyPasswordToClipboard':
-            console.log('eventpage');
             var message = {
                 command: 'copyPasswordToClipboard',
                 context: { password: event.data.context.password }
             };
-            console.log(chrome.extension.getBackgroundPage());
             chrome.extension.getBackgroundPage().postMessage(message, '*');
             break;
+        case 'passwordGenerated':
+            var eventLabel = generateEventLabel(event.data.context.selectedProfile);
+            _gaq.push(['_trackEvent', 'Password Generated', event.data.context.method, eventLabel]);
     }
 }, false);
+
+function generateEventLabel(profile) {
+    return 'Symbols:' + profile.includeSymbols +
+        '|Mask:' + profile.maskPhrase +
+        '|CaseSensitive:' + profile.caseSensitive +
+        '|UsePin:' + profile.usePinNumber;
+}
 
 function profilesLoaded(profiles) {
     var iframe = parent.document.getElementById('popupFrame');
