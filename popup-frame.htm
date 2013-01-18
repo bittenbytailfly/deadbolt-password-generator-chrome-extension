@@ -29,9 +29,9 @@
       
     <div id="logo-container">
         <div id="menu" class="btn-toolbar">
-            <a class="btn btn-small btn-inverse" href="#" data-bind="click: aboutPageRequested" title="Home page"><i class="icon-home icon-white"></i></a>
-            <!--<a class="btn btn-small btn-inverse" href="#" data-bind="click: sharePageRequested" title="Share"><i class="icon-share icon-white"></i></a>-->
-            <a class="btn btn-small btn-inverse" href="#" data-bind="click: settingsChangeRequested" title="Options"><i class="icon-wrench icon-white"></i></a>
+            <a class="btn btn-small btn-inverse btn-flat" href="#" data-bind="click: aboutPageRequested" title="Home page"><i class="icon-home icon-white"></i></a>
+            <a class="btn btn-small btn-inverse btn-flat" href="#" data-bind="click: sharePageRequested" title="Share"><i class="icon-share icon-white"></i></a>
+            <a class="btn btn-small btn-inverse btn-flat" href="#" data-bind="click: settingsChangeRequested" title="Options"><i class="icon-wrench icon-white"></i></a>
         </div>
         <h1><span>Deadbolt Password Generator</span></h1>
       </div>
@@ -58,8 +58,8 @@
                             <small class="muted" data-bind="html: remainingChars"></small>
                         </div>
                         <div class="controls" data-bind="visible: buttonsEnabled">
-                            <button class="btn btn-mini btn-primary" type="button" data-bind="enable: buttonsEnabled, click: revealPassword">Reveal</button>
-                            <button class="btn btn-mini btn-primary" type="button" data-bind="enable: buttonsEnabled, click: copyToClipboard">Copy</button>
+                            <button class="btn btn-mini btn-primary btn-flat" type="button" data-bind="enable: buttonsEnabled, click: revealPassword">Reveal</button>
+                            <button class="btn btn-mini btn-primary btn-flat" type="button" data-bind="enable: buttonsEnabled, click: copyToClipboard">Copy</button>
                         </div>
                     </div>
                 </div>

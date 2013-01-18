@@ -1,9 +1,8 @@
-﻿#extension-container
+#extension-container
 {
     width: 420px;
     height: 242px;
-    background: url(../img/bg.png);
-    border-radius: 5px;
+    background: #444;
 }
 
 dl
@@ -80,8 +79,6 @@ dl:first-child
     z-index: 900;
     width: inherit;
     height: inherit;
-    -webkit-border-radius: 5px;
-    -webkit-box-shadow: 0px 0px 10px 1px #333;
 }
 .panel .back
 {
@@ -141,11 +138,24 @@ h1
 #menu
 {
     float: right;
-    padding-top: 5px;
+}
+
+#menu a {
+    background: #111;
 }
 
 #passwordCopied p
 {
     padding-top: 50px;
     text-align: center;
+}
+
+.btn-flat {
+    filter:progid:DXImageTransform.Microsoft.Gradient(enabled='false');
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    background-image:none;
+    border:0;
+    border-radius: 0;
 }
