@@ -1,0 +1,193 @@
+﻿<!--
+    Copyright 2012, 2013 Ed Carter
+
+    This file is part of Deadbolt Password Generator.
+
+    Deadbolt Password Generator is free software: you can redistribute 
+    it and/or modify it under the terms of the GNU General Public 
+    License as published by the Free Software Foundation, either 
+    version 3 of the License, or (at your option) any later version.
+
+    Deadbolt Password Generator is distributed in the hope that it 
+    will be useful, but WITHOUT ANY WARRANTY; without even the implied 
+    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+    See the GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Deadbolt Password Generator.  If not, see 
+    <http://www.gnu.org/licenses/>.
+ -->
+<!DOCTYPE html>
+<html> 
+  <head>
+    <title>Deadbolt</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <style>
+        #entry { width: 550px; }
+        .pinNumber select { width: 4em; }
+        h1 span { display: none; }
+        h1 { width: 198px; height: 41px; background: url('../img/deadbolt-logo.png'); }
+        .titleBar {background: #414141;margin-bottom:1em;}
+    </style>
+  </head>
+  <body>
+  <div class="titleBar">
+        <div class="container">
+          <h1><span>Deadbolt Password Generator</span></h1>
+        </div>
+    </div>
+  <div class="container">
+
+    <div class="well">
+  <button type="button" class="btn btn-primary" data-bind="click: createProfile">Add Profile</button>
+  </div>
+
+      <div class="tabbable"> <!-- Only required for left/right tabs -->
+        <ul id="profileTabs" class="nav nav-tabs">
+            
+            <!-- ko foreach: profiles -->
+            
+            <li>
+                <a data-toggle="tab" data-bind="attr: { 'href': '#tab' + $index() }">
+                    <span class="close" data-bind="click: function() { $parent.removeProfile($data, $index()); }, visible: $index() != 0">&times;</span>
+                    <span data-bind="html: name"></span>&nbsp;
+                </a>
+            </li>
+            
+            <!-- /ko -->
+
+        </ul>
+        <div class="tab-content">
+            
+            <!-- ko foreach: profiles -->
+
+            <div class="tab-pane" data-bind="attr: { 'id': 'tab' + $index() }">
+
+                <div class="form-horizontal">
+
+                    <div class="control-group">
+                        <label class="control-label" for="txtProfile1Name">Name</label>
+                        <div class="controls">
+                            <input type="text" id="txtProfile1Name" data-bind="value: name, valueUpdate: 'afterkeydown'" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="inputEmail">Include Symbols</label>
+                        <div class="controls">
+                            <div class="btn-group">
+                                <button type="button" class="btn" data-bind="click: toggleIncludeSymbols, css: { active: includeSymbols }">Yes</button>
+                                <button type="button" class="btn" data-bind="click: toggleIncludeSymbols, css: { active: !includeSymbols() }">No</button>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="control-group">
+                        <label class="control-label" for="inputPassword">Mask Phrase</label>
+                        <div class="controls">
+                            <div class="btn-group" data-toggle="buttons-radio">
+                                <button type="button" class="btn" data-bind="click: toggleMaskPhrase, css: { active: maskPhrase }">Yes</button>
+                                <button type="button" class="btn" data-bind="click: toggleMaskPhrase, css: { active: !maskPhrase() }">No</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="inputPassword">Case Sensitive</label>
+                        <div class="controls">
+                            <div class="btn-group" data-toggle="buttons-radio">
+                                <button type="button" class="btn" data-bind="click: toggleCaseSensitive, css: { active: caseSensitive }">Yes</button>
+                                <button type="button" class="btn" data-bind="click: toggleCaseSensitive, css: { active: !caseSensitive() }">No</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="inputPassword">Use Pin Number</label>
+                        <div class="controls">
+                            <div class="btn-group" data-toggle="buttons-radio">
+                                <button type="button" class="btn" data-bind="click: toggleUsePinNumber, css: { active: usePinNumber }">Yes</button>
+                                <button type="button" class="btn" data-bind="click: toggleUsePinNumber, css: { active: !usePinNumber() }">No</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group" data-bind="visible: usePinNumber">
+                        <label class="control-label" for="inputPassword">Pin Number</label>
+                        <div class="controls pinNumber">
+                            <select data-bind="value: pin1">
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                            </select>
+                            <select data-bind="value: pin2">
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                            </select>
+                            <select data-bind="value: pin3">
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                            </select>
+                            <select data-bind="value: pin4">
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                            </select>
+                        </div>
+                    </div>
+  
+                </div>
+
+            </div>
+            
+            <!-- /ko -->
+            
+        </div>
+
+        <div class="well" data-bind="visible: changesMade">
+            <button type="button" class="btn btn-primary" data-bind="click: save">Save</button>
+            Your changes have not yet been saved
+        </div>
+
+    </div>
+
+    </div>
+
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/knockout-2.2.0.min.js"></script>
+    <script type="text/javascript" src="js/deadbolt.js"></script>
+    <script type="text/javascript" src="js/options-frame.js"></script>
+
+  </body>
+</html>
