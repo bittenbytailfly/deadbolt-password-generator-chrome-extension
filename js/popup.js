@@ -48,7 +48,7 @@ window.addEventListener('message', function (event) {
 
 function generateEventLabel(profile) {
     return 'Symbols:' + profile.includeSymbols +
-        '|Mask:' + profile.maskPhrase +
+        '|Length:' + profile.passwordLength +
         '|CaseSensitive:' + profile.caseSensitive +
         '|UsePin:' + profile.usePinNumber;
 }

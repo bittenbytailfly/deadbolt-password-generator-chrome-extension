@@ -77,16 +77,16 @@
                     <dl><dt>3</dt><dd data-bind="text: getPasswordCharacter(3)"></dd></dl>
                     <dl><dt>4</dt><dd data-bind="text: getPasswordCharacter(4)"></dd></dl>
                     <dl><dt>5</dt><dd data-bind="text: getPasswordCharacter(5)"></dd></dl>
-                    <dl><dt>6</dt><dd data-bind="text: getPasswordCharacter(6)"></dd></dl>
-                    <dl><dt>7</dt><dd data-bind="text: getPasswordCharacter(7)"></dd></dl>
-                    <dl><dt>8</dt><dd data-bind="text: getPasswordCharacter(8)"></dd></dl>
-                    <dl><dt>9</dt><dd data-bind="text: getPasswordCharacter(9)"></dd></dl>
-                    <dl><dt>10</dt><dd data-bind="text: getPasswordCharacter(10)"></dd></dl>
-                    <dl><dt>11</dt><dd data-bind="text: getPasswordCharacter(11)"></dd></dl>
-                    <dl><dt>12</dt><dd data-bind="text: getPasswordCharacter(12)"></dd></dl>
-                    <dl><dt>13</dt><dd data-bind="text: getPasswordCharacter(13)"></dd></dl>
-                    <dl><dt>14</dt><dd data-bind="text: getPasswordCharacter(14)"></dd></dl>
-                    <dl><dt>15</dt><dd data-bind="text: getPasswordCharacter(15)"></dd></dl>
+                    <dl data-bind="visible: selectedProfile().passwordLength > 5"><dt>6</dt><dd data-bind="text: getPasswordCharacter(6)"></dd></dl>
+                    <dl data-bind="visible: selectedProfile().passwordLength > 6"><dt>7</dt><dd data-bind="text: getPasswordCharacter(7)"></dd></dl>
+                    <dl data-bind="visible: selectedProfile().passwordLength > 7"><dt>8</dt><dd data-bind="text: getPasswordCharacter(8)"></dd></dl>
+                    <dl data-bind="visible: selectedProfile().passwordLength > 8"><dt>9</dt><dd data-bind="text: getPasswordCharacter(9)"></dd></dl>
+                    <dl data-bind="visible: selectedProfile().passwordLength > 9"><dt>10</dt><dd data-bind="text: getPasswordCharacter(10)"></dd></dl>
+                    <dl data-bind="visible: selectedProfile().passwordLength > 10"><dt>11</dt><dd data-bind="text: getPasswordCharacter(11)"></dd></dl>
+                    <dl data-bind="visible: selectedProfile().passwordLength > 11"><dt>12</dt><dd data-bind="text: getPasswordCharacter(12)"></dd></dl>
+                    <dl data-bind="visible: selectedProfile().passwordLength > 12"><dt>13</dt><dd data-bind="text: getPasswordCharacter(13)"></dd></dl>
+                    <dl data-bind="visible: selectedProfile().passwordLength > 13"><dt>14</dt><dd data-bind="text: getPasswordCharacter(14)"></dd></dl>
+                    <dl data-bind="visible: selectedProfile().passwordLength > 14"><dt>15</dt><dd data-bind="text: getPasswordCharacter(15)"></dd></dl>
                 </div>
               </div>
               <div id="passwordCopied" data-bind="visible: copiedToClipboard">
@@ -105,6 +105,7 @@
     <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/knockout-2.2.0.min.js"></script>
+    <script type="text/javascript" src="js/profiles.js"></script>
     <script type="text/javascript" src="js/deadbolt.js"></script>
     <script type="text/javascript" src="js/popup-frame.js"></script>
     

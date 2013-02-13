@@ -45,7 +45,7 @@ var deadbolt = function (profiles) {
 
     self.revealPassword = function () {
         self.showingPassword(true);
-        self.password(encodePassword(self.phrase(), self.selectedProfile().pin1 + self.selectedProfile().pin2 + self.selectedProfile().pin3 + self.selectedProfile().pin4, self.selectedProfile().includeSymbols, self.selectedProfile().caseSensitive));
+        self.password(encodePassword(self.phrase(), self.selectedProfile().pin1 + self.selectedProfile().pin2 + self.selectedProfile().pin3 + self.selectedProfile().pin4, self.selectedProfile().includeSymbols, self.selectedProfile().caseSensitive, self.selectedProfile().passwordLength));
         self.notifyAnalyticsEvent('Revealed');
     };
 
@@ -70,7 +70,7 @@ var deadbolt = function (profiles) {
 
     self.copyToClipboard = function () {
         self.copiedToClipboard(true);
-        self.password(encodePassword(self.phrase(), self.selectedProfile().pin1 + self.selectedProfile().pin2 + self.selectedProfile().pin3 + self.selectedProfile().pin4, self.selectedProfile().includeSymbols, self.selectedProfile().caseSensitive));
+        self.password(encodePassword(self.phrase(), self.selectedProfile().pin1 + self.selectedProfile().pin2 + self.selectedProfile().pin3 + self.selectedProfile().pin4, self.selectedProfile().includeSymbols, self.selectedProfile().caseSensitive, self.selectedProfile().passwordLength));
         var message = {
             command: 'copyPasswordToClipboard',
             context: { password: self.password() }

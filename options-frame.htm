@@ -81,16 +81,6 @@
                             </div>
                         </div>
                     </div>
- 
-                    <div class="control-group">
-                        <label class="control-label" for="inputPassword">Mask Phrase</label>
-                        <div class="controls">
-                            <div class="btn-group" data-toggle="buttons-radio">
-                                <button type="button" class="btn" data-bind="click: toggleMaskPhrase, css: { active: maskPhrase }">Yes</button>
-                                <button type="button" class="btn" data-bind="click: toggleMaskPhrase, css: { active: !maskPhrase() }">No</button>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="control-group">
                         <label class="control-label" for="inputPassword">Case Sensitive</label>
@@ -165,6 +155,14 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="passwordLength">Password Length</label>
+                        <div class="controls">
+                            <input id="passwordLength" type="range" min="5" max="15" step="1" data-bind="value: passwordLength" />
+                            <span data-bind="text: passwordLength"></span>
+                        </div>
+                    </div>
   
                 </div>
 
@@ -186,6 +184,7 @@
     <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/knockout-2.2.0.min.js"></script>
+    <script type="text/javascript" src="js/profiles.js"></script>
     <script type="text/javascript" src="js/deadbolt.js"></script>
     <script type="text/javascript" src="js/options-frame.js"></script>
 

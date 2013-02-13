@@ -25,17 +25,17 @@ window.addEventListener('message', function (event) {
     }
 }, false);
 
-function profile(name, includeSymbols, maskPhrase, caseSensitive, usePinNumber, pin1, pin2, pin3, pin4, parent) {
+function profile(name, includeSymbols, caseSensitive, usePinNumber, pin1, pin2, pin3, pin4, passwordLength, parent) {
     var self = this;
     self.name = ko.observable(name);
     self.includeSymbols = ko.observable(includeSymbols);
-    self.maskPhrase = ko.observable(maskPhrase);
     self.caseSensitive = ko.observable(caseSensitive);
     self.usePinNumber = ko.observable(usePinNumber);
     self.pin1 = ko.observable(pin1);
     self.pin2 = ko.observable(pin2);
     self.pin3 = ko.observable(pin3);
     self.pin4 = ko.observable(pin4);
+    self.passwordLength = ko.observable(passwordLength);
     self.parent = parent;
 
     self.pinNumber = ko.computed(function () {
@@ -44,10 +44,6 @@ function profile(name, includeSymbols, maskPhrase, caseSensitive, usePinNumber, 
 
     self.toggleIncludeSymbols = function (data, event) {
         self.includeSymbols(self.toggle(event.srcElement.outerText));
-    };
-
-    self.toggleMaskPhrase = function (data, event) {
-        self.maskPhrase(self.toggle(event.srcElement.outerText));
     };
 
     self.toggleCaseSensitive = function (data, event) {
@@ -68,7 +64,7 @@ function profile(name, includeSymbols, maskPhrase, caseSensitive, usePinNumber, 
 
     self.name.subscribe(function() { self.markChange(); });
     self.includeSymbols.subscribe(function () { self.markChange(); });
-    self.maskPhrase.subscribe(function () { self.markChange(); });
+    self.passwordLength.subscribe(function () { self.markChange(); });
     self.caseSensitive.subscribe(function () { self.markChange(); });
     self.usePinNumber.subscribe(function () { self.markChange(); });
     self.pin1.subscribe(function () { self.markChange(); });
@@ -82,7 +78,7 @@ function profileSelection() {
     self.profiles = ko.observableArray();
     self.changesMade = ko.observable(false);
     self.createProfile = function () {
-        var p = new profile('Profile ' + (self.profiles().length + 1), false, false, false, false, '0', '0', '0', '0', this);
+        var p = new profile('Profile ' + (self.profiles().length + 1), false, false, false, '0', '0', '0', '0', 15, this);
         self.profiles.push(p);
         $('#profileTabs a:last').tab('show');
         self.changesMade(true);
@@ -107,7 +103,7 @@ function profileSelection() {
 
         for (var i = 0; i < self.profiles().length; i++) {
             var p = self.profiles()[i];
-            simpleProfileList.push(new simpleProfile(p.name(), p.includeSymbols(), p.maskPhrase(), p.caseSensitive(), p.usePinNumber(), p.pin1(), p.pin2(), p.pin3(), p.pin4()));
+            simpleProfileList.push(new simpleProfile(p.name(), p.includeSymbols(), p.caseSensitive(), p.usePinNumber(), p.pin1(), p.pin2(), p.pin3(), p.pin4(), p.passwordLength()));
         }
         
         var message = {
@@ -124,7 +120,7 @@ function main(profiles) {
 
     for (var i = 0; i < profiles.length; i++) {
         var p = profiles[i];
-        viewModel.addProfile(new profile(p.name, p.includeSymbols, p.maskPhrase, p.caseSensitive, p.usePinNumber, p.pin1, p.pin2, p.pin3, p.pin4, viewModel));
+        viewModel.addProfile(new profile(p.name, p.includeSymbols, p.caseSensitive, p.usePinNumber, p.pin1, p.pin2, p.pin3, p.pin4, p.passwordLength, viewModel));
     }
 
     ko.applyBindings(viewModel);
