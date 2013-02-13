@@ -32,11 +32,16 @@ var deadbolt = function (profiles) {
     self.minimumPhraseLength = 6;
     self.profileIndex = ko.observable(0);
     self.phrase = ko.observable('');
+    self.showPhrase = ko.observable(false);
     self.showingPassword = ko.observable(false);
     self.placeHolders = ['rainforest book shop', 'black horse banking', 'dark blue social', 'bird song status update', 'grocery shopping'];
     self.placeHolderValue = 'e.g. ' + self.placeHolders[Math.floor((Math.random() * self.placeHolders.length))];
     self.password = ko.observable('');
     self.copiedToClipboard = ko.observable(false);
+
+    self.toggleShowPhrase = function () {
+        self.showPhrase(!self.showPhrase());
+    }
 
     self.revealPassword = function () {
         self.showingPassword(true);
@@ -79,7 +84,7 @@ var deadbolt = function (profiles) {
     });
 
     self.inputPhraseType = ko.computed(function () {
-        return self.selectedProfile().maskPhrase ? 'password' : 'text';
+        return self.showPhrase() ? 'text' : 'password';
     });
 
     self.remainingChars = ko.computed(function () {
@@ -96,8 +101,8 @@ var deadbolt = function (profiles) {
     self.passwordGenerated = ko.computed(function () {
         return self.password().length > 0;
     });
-    
-    self.notifyAnalyticsEvent = function(method) {
+
+    self.notifyAnalyticsEvent = function (method) {
         var message = {
             command: 'passwordGenerated',
             context: { selectedProfile: self.selectedProfile(), method: method }

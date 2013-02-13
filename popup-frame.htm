@@ -29,9 +29,8 @@
       
     <div id="logo-container">
         <div id="menu" class="btn-toolbar">
-            <a class="btn btn-small btn-inverse btn-flat" href="#" data-bind="click: aboutPageRequested" title="Home page"><i class="icon-home icon-white"></i></a>
-            <a class="btn btn-small btn-inverse btn-flat" href="#" data-bind="click: sharePageRequested" title="Share"><i class="icon-share icon-white"></i></a>
-            <a class="btn btn-small btn-inverse btn-flat" href="#" data-bind="click: settingsChangeRequested" title="Options"><i class="icon-wrench icon-white"></i></a>
+            <button class="btn btn-small btn-inverse" data-bind="click: aboutPageRequested" title="Home page"><i class="icon-home icon-white"></i></button>
+            <button class="btn btn-small btn-inverse" data-bind="click: sharePageRequested" title="Share"><i class="icon-share icon-white"></i></button>
         </div>
         <h1><span>Deadbolt Password Generator</span></h1>
       </div>
@@ -43,14 +42,19 @@
                     <div class="control-group">
                         <label class="control-label" for="txtProfileName">Profile</label>
                         <div class="controls">
-                            <select id="txtProfileName" data-bind="options: profiles, optionsText: 'name', value: selectedProfile">
-                            </select>
+                            <div class="input-append">
+                                <select id="txtProfileName" class="span3" data-bind="options: profiles, optionsText: 'name', value: selectedProfile"></select>
+                                <button class="btn" data-bind="click: settingsChangeRequested" title="Options"><i class="icon-cog"></i></button>
+                            </div>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="txtPassphrase">Phrase</label>
                         <div class="controls">
-                            <input id="txtPassphrase" data-bind="attr: { 'type': inputPhraseType,'placeholder': placeHolderValue }, value: phrase, valueUpdate: 'afterkeydown'" />
+                            <div class="input-append">
+                                <input id="txtPassphrase" class="span3" data-bind="attr: { 'type': inputPhraseType,'placeholder': placeHolderValue }, value: phrase, valueUpdate: 'afterkeydown'" />
+                                <button class="btn" data-bind="click: toggleShowPhrase" title="Show/Hide"><i data-bind="css: { 'icon-eye-open': showPhrase(), 'icon-eye-close': !showPhrase() }"></i></button>
+                            </div>
                         </div>
                     </div>
                     <div class="control-group">
