@@ -1,6 +1,6 @@
 {
   "name": "Deadbolt Password Generator",
-  "version": "0.9.4",
+  "version": "1.0.0",
   "description": "Turn memorable phrases into strong passwords.",
   "icons": { 
     "16": "img/icon16.png",
