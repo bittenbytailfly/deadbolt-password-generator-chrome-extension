@@ -50,7 +50,7 @@ function retrieveProfiles(callback) {
             var p = savedProfileJson[i];
             savedProfiles.push(new simpleProfile(p.name, p.includeSymbols, p.caseSensitive, p.usePinNumber, p.pin1, p.pin2, p.pin3, p.pin4, p.passwordLength));
         }
-        savedProfiles.sort();
+        savedProfiles.sort(function (a, b) { return a.name.localeCompare(b.name); });
         callback(savedProfiles);
     });
 }
