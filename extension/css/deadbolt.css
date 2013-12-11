@@ -1,0 +1,151 @@
+#extension-container
+{
+    width: 420px;
+    height: 242px;
+    background: #444;
+}
+
+dl
+{
+    margin: 0;
+    border-right: solid 1px #eee;
+    display: inline-block;
+    width: 20px;
+}
+
+dt
+{
+    text-align: center;
+    font-size: 1em;
+    color: #999;
+}
+
+dd
+{
+    margin: 0;
+    text-align: center;
+}
+
+dl:first-child
+{
+    border-left: solid 1px #eee;
+}
+
+#fullPassword
+{
+    font-size: 2em;
+    text-align: center;
+    margin: 1em;
+}
+
+#fullPassword, dd
+{
+    font-family: Courier New, Courier, Terminal;
+    font-weight: bold;
+}
+
+#passChars
+{
+    text-align: center;
+}
+
+.panel
+{
+    width: 400px;
+    height: 130px;
+    margin: auto;
+    -webkit-perspective: 1000;
+}
+.panel .front
+{
+    z-index: 900;
+    -webkit-transform: rotateX(0deg) rotateY(0deg);
+    -webkit-transform-style: preserve-3d;
+    -webkit-backface-visibility: hidden;
+    -webkit-transition: all .7s ease-in-out;
+}
+.panel.flip .front
+{
+    z-index: 900;
+    -webkit-transform: rotateY(180deg);
+}
+.front, .back
+{
+    padding: 15px 0;
+    background: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 900;
+    width: inherit;
+    height: inherit;
+}
+.panel .back
+{
+    z-index: 800;
+    -webkit-transform: rotateY(-180deg);
+    -webkit-transform-style: preserve-3d;
+    -webkit-backface-visibility: hidden;
+    -webkit-transition: all .7s ease-in-out;
+}
+
+.panel.flip .back
+{
+    z-index: 1000;
+    -webkit-transform: rotateX(0deg) rotateY(0deg);
+}
+
+/* -- X axis rotation for click panel -- */
+.click .front
+{
+    -webkit-transform: rotateX(0deg);
+}
+.click.flip .front
+{
+    -webkit-transform: rotateX(180deg);
+}
+.click .back
+{
+    -webkit-transform: rotateX(-180deg);
+}
+.click.flip .back
+{
+    -webkit-transform: rotateX(0deg);
+}
+h1 span
+{
+    display: none;
+}
+h1
+{
+    width: 198px;
+    height: 42px;
+    background: url('../img/deadbolt-logo.png');
+}
+#logo-container
+{
+    padding: 5px 10px;
+}
+.control-label
+{
+    width: 100px !important;
+}
+.controls
+{
+    margin-left: 120px !important;
+}
+
+#menu
+{
+    float: right;
+}
+
+#menu a {
+    background: #111;
+}
+
+#passwordCopied p
+{
+    padding-top: 50px;
+    text-align: center;
+}

@@ -1,0 +1,16 @@
+﻿*
+{
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+body
+{
+    margin: 0px;
+    border: none;
+}
+iframe
+{
+    border: 0;
+    display: block;
+}
