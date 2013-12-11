@@ -28,7 +28,7 @@ window.addEventListener('message', function (event) {
 var deadbolt = function (deadboltSettings) {
     var self = this;
     self.profiles = deadboltSettings.simpleProfileList;
-    self.selectedProfile = ko.observable(deadboltSettings.simpleProfileList[0]);
+    self.selectedProfile = ko.observable($.grep(deadboltSettings.simpleProfileList, function (p) { return p.name == deadboltSettings.defaultProfileName; })[0]);
     self.minimumPhraseLength = 6;
     self.profileIndex = ko.observable(0);
     self.phrase = ko.observable('');
@@ -38,6 +38,8 @@ var deadbolt = function (deadboltSettings) {
     self.placeHolderValue = 'e.g. ' + self.placeHolders[Math.floor((Math.random() * self.placeHolders.length))];
     self.password = ko.observable('');
     self.copiedToClipboard = ko.observable(false);
+
+    console.log(self.selectedProfile());
 
     self.toggleShowPhrase = function () {
         self.showPhrase(!self.showPhrase());

@@ -117,6 +117,7 @@ function deadboltSettingsViewModel(defaultProfileName) {
         parent.postMessage(message, '*');
         self.changesMade(false);
     };
+    self.defaultProfileName.subscribe(function () { self.changesMade(true); });
 }
 
 function main(deadboltSettings) {
