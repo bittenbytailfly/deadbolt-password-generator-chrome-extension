@@ -64,22 +64,3 @@ function decreaseCounter() {
         }, '*');
     }
 }
-
-document.addEventListener('DOMContentLoaded', function () {
-    chrome.storage.local.set({ name: 'Bob' }, function () {
-        console.log('Name saved');
-    });
-
-    // Later on...
-    chrome.storage.local.get('name', function (r) {
-        console.log('Name retrieved: ' + r['name']);
-    });
-    
-    chrome.storage.local.set({ name: 'Bob' }, function () {
-        console.log('Name saved');
-    });
-
-    chrome.storage.local.get('name', function (r) {
-        console.log('Name retrieved: ' + r['name']);
-    });
-});

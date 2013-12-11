@@ -20,24 +20,23 @@ window.addEventListener('message', function (event) {
     var command = event.data.command;
     switch (command) {
         case 'loaded':
-            retrieveProfiles(profilesLoaded);
+            retrieveDeadboltSettings(settingsLoaded);
             break;
-        case 'profileSaveRequest':
-            saveProfiles(event.data.context.profiles, profilesSaved);
+        case 'deadboltSettingsSaveRequest':
+            saveDeadboltSettings(event.data.context.deadboltSettings, settingsSaved);
             break;
     }
 }, false);
 
-function profilesLoaded(profiles) {
-    console.log(profiles);
+function settingsLoaded(deadboltSettings) {
     var iframe = parent.document.getElementById('optionsFrame');
     var message = {
-        command: 'profiles',
-        context: { profileList: profiles }
+        command: 'deadboltSettings',
+        context: { 'deadboltSettings': deadboltSettings }
     };
     iframe.contentWindow.postMessage(message, '*');
 }
 
-function profilesSaved() {
+function settingsSaved() {
     console.log('do something clever here ...');
 }

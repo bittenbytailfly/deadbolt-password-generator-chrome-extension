@@ -19,8 +19,8 @@
 window.addEventListener('message', function (event) {
     var command = event.data.command;
     switch (command) {
-        case 'profiles':
-            main(event.data.context.profileList);
+        case 'deadboltSettings':
+            main(event.data.context.deadboltSettings);
             break;
     }
 }, false);
@@ -73,8 +73,9 @@ function profile(name, includeSymbols, caseSensitive, usePinNumber, pin1, pin2, 
     self.pin4.subscribe(function () { self.markChange(); });
 }
 
-function profileSelection() {
+function deadboltSettingsViewModel(defaultProfileName) {
     var self = this;
+    self.defaultProfileName = ko.observable(defaultProfileName)
     self.profiles = ko.observableArray();
     self.changesMade = ko.observable(false);
     self.createProfile = function () {
@@ -99,27 +100,30 @@ function profileSelection() {
         newSelectedTab.tab('show');
     };
     self.save = function () {
+        
         var simpleProfileList = new Array();
 
         for (var i = 0; i < self.profiles().length; i++) {
             var p = self.profiles()[i];
             simpleProfileList.push(new simpleProfile(p.name(), p.includeSymbols(), p.caseSensitive(), p.usePinNumber(), p.pin1(), p.pin2(), p.pin3(), p.pin4(), p.passwordLength()));
         }
-        
+
+        var settings = new deadboltSettings(self.defaultProfileName(), simpleProfileList);
+
         var message = {
-            command: 'profileSaveRequest',
-            context: { profiles: simpleProfileList }
+            command: 'deadboltSettingsSaveRequest',
+            context: { 'deadboltSettings': settings }
         };
         parent.postMessage(message, '*');
         self.changesMade(false);
     };
 }
 
-function main(profiles) {
-    var viewModel = new profileSelection();
-
-    for (var i = 0; i < profiles.length; i++) {
-        var p = profiles[i];
+function main(deadboltSettings) {
+    
+    var viewModel = new deadboltSettingsViewModel(deadboltSettings.defaultProfileName);
+    for (var i = 0; i < deadboltSettings.simpleProfileList.length; i++) {
+        var p = deadboltSettings.simpleProfileList[i];
         viewModel.addProfile(new profile(p.name, p.includeSymbols, p.caseSensitive, p.usePinNumber, p.pin1, p.pin2, p.pin3, p.pin4, p.passwordLength, viewModel));
     }
 

@@ -19,16 +19,16 @@
 window.addEventListener('message', function (event) {
     var command = event.data.command;
     switch (command) {
-        case 'profiles':
-            main(event.data.context.profileList);
+        case 'settings':
+            main(event.data.context.deadboltSettings);
             break;
     }
 }, false);
 
-var deadbolt = function (profiles) {
+var deadbolt = function (deadboltSettings) {
     var self = this;
-    self.profiles = profiles;
-    self.selectedProfile = ko.observable(profiles[0]);
+    self.profiles = deadboltSettings.simpleProfileList;
+    self.selectedProfile = ko.observable(deadboltSettings.simpleProfileList[0]);
     self.minimumPhraseLength = 6;
     self.profileIndex = ko.observable(0);
     self.phrase = ko.observable('');
@@ -111,8 +111,8 @@ var deadbolt = function (profiles) {
     }
 };
 
-function main(profiles) {
-    var viewModel = new deadbolt(profiles);
+function main(deadboltSettings) {
+    var viewModel = new deadbolt(deadboltSettings);
     ko.applyBindings(viewModel);
 }
 

@@ -16,6 +16,11 @@
 //    along with Deadbolt Password Generator.  If not, see 
 //    <http://www.gnu.org/licenses/>.
 
+function deadboltSettings(defaultProfileName, simpleProfileList) {
+    this.defaultProfileName = defaultProfileName;
+    this.simpleProfileList = simpleProfileList;
+}
+
 function simpleProfile(name, includeSymbols, caseSensitive, usePinNumber, pin1, pin2, pin3, pin4, passwordLength) {
     this.name = name;
     this.includeSymbols = includeSymbols;
@@ -28,36 +33,28 @@ function simpleProfile(name, includeSymbols, caseSensitive, usePinNumber, pin1, 
     this.passwordLength = passwordLength;
 }
 
-function createDefaultProfileList() {
+function createDefaultDeadboltSettings() {
     var simpleProfileList = new Array();
     var defaultSimpleProfile = new simpleProfile('Default', false, false, false, '0', '0', '0', '0', 15);
     simpleProfileList.push(defaultSimpleProfile);
-    saveProfiles(simpleProfileList);
-    return simpleProfileList;
+    var settings = new deadboltSettings('Default', simpleProfileList);
+    saveDeadboltSettings(settings);
+    return settings;
 }
 
-var savedProfileJson;
-
-function retrieveProfiles(callback) {
-    chrome.storage.sync.get('profileList', function (r) {
-        var savedProfileJson = r.profileList;
-        if (!savedProfileJson || !savedProfileJson[0] || !savedProfileJson[0].name) {
-            savedProfileJson = createDefaultProfileList();
+function retrieveDeadboltSettings(callback) {
+    chrome.storage.sync.get('deadboltSettings', function (r) {
+        var savedSettings = r.deadboltSettings;
+        if (!savedSettings) {
+            savedSettings = createDefaultDeadboltSettings();
         }
-
-        var savedProfiles = new Array();
-        for (var i = 0; i < savedProfileJson.length; i++) {
-            var p = savedProfileJson[i];
-            savedProfiles.push(new simpleProfile(p.name, p.includeSymbols, p.caseSensitive, p.usePinNumber, p.pin1, p.pin2, p.pin3, p.pin4, p.passwordLength));
-        }
-        savedProfiles.sort(function (a, b) { return a.name.localeCompare(b.name); });
-        callback(savedProfiles);
+        callback(savedSettings);
     });
 }
 
-function saveProfiles(profiles, callback) {
-    console.log('attempting save');
-    chrome.storage.sync.set({ profileList: profiles }, function () {
+function saveDeadboltSettings(deadboltSettings, callback) {
+    deadboltSettings.simpleProfileList.sort(function (a, b) { return a.name.localeCompare(b.name); });
+    chrome.storage.sync.set({ 'deadboltSettings': deadboltSettings }, function () {
         if (callback != null) {
             callback();
         }

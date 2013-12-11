@@ -20,7 +20,7 @@ window.addEventListener('message', function (event) {
     var command = event.data.command;
     switch (command) {
         case 'loaded':
-            retrieveProfiles(profilesLoaded);
+            retrieveDeadboltSettings(settingsLoaded);
             break;
         case 'settingsChangeRequested':
             chrome.tabs.create({
@@ -53,11 +53,11 @@ function generateEventLabel(profile) {
         '|UsePin:' + profile.usePinNumber;
 }
 
-function profilesLoaded(profiles) {
+function settingsLoaded(deadboltSettings) {
     var iframe = parent.document.getElementById('popupFrame');
     var message = {
-        command: 'profiles',
-        context: { profileList: profiles }
+        command: 'settings',
+        context: { 'deadboltSettings': deadboltSettings }
     };
     iframe.contentWindow.postMessage(message, '*');
     chrome.extension.getBackgroundPage().postMessage({
