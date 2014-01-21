@@ -35,7 +35,7 @@ function simpleProfile(name, includeSymbols, caseSensitive, usePinNumber, pin1, 
 
 function createDefaultDeadboltSettings() {
     var simpleProfileList = new Array();
-    var defaultSimpleProfile = new simpleProfile('Default', false, false, false, '0', '0', '0', '0', 15);
+    var defaultSimpleProfile = new simpleProfile('Default', true, true, false, '0', '0', '0', '0', 15);
     simpleProfileList.push(defaultSimpleProfile);
     var settings = new deadboltSettings('Default', simpleProfileList);
     saveDeadboltSettings(settings);
