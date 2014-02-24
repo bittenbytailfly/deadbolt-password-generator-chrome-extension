@@ -52,7 +52,7 @@
                         <label class="control-label" for="txtPassphrase">Phrase</label>
                         <div class="controls">
                             <div class="input-append">
-                                <input id="txtPassphrase" class="span3" data-bind="attr: { 'type': inputPhraseType,'placeholder': placeHolderValue }, value: phrase, valueUpdate: 'afterkeydown'" />
+                                <input id="txtPassphrase" class="span3" data-bind="attr: { 'type': inputPhraseType,'placeholder': placeHolderValue }, value: phrase, valueUpdate: 'afterkeydown', hasFocus: phraseBoxFocused" />
                                 <button class="btn" data-bind="click: toggleShowPhrase" title="Show/Hide"><i data-bind="css: { 'icon-eye-open': showPhrase(), 'icon-eye-close': !showPhrase() }"></i></button>
                             </div>
                         </div>

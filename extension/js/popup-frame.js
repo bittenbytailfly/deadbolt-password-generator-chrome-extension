@@ -38,6 +38,7 @@ var deadbolt = function (deadboltSettings) {
     self.placeHolderValue = 'e.g. ' + self.placeHolders[Math.floor((Math.random() * self.placeHolders.length))];
     self.password = ko.observable('');
     self.copiedToClipboard = ko.observable(false);
+    self.phraseBoxFocused = ko.observable(true);
 
     console.log(self.selectedProfile());
 
