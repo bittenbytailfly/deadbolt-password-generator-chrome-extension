@@ -9,5 +9,5 @@ This is a Chrome Extension for Deadbolt Password Generator
 
 # License
 
-Copyright 2012, 2013 Ed Carter
+Copyright 2012, 2014 Ed Carter
 GNU GENERAL PUBLIC LICENSE Version 3 - <http://www.gnu.org/licenses/>
