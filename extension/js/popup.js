@@ -16,51 +16,78 @@
 //    along with Deadbolt Password Generator.  If not, see 
 //    <http://www.gnu.org/licenses/>.
 
-window.addEventListener('message', function (event) {
-    var command = event.data.command;
-    switch (command) {
-        case 'loaded':
-            retrieveDeadboltSettings(settingsLoaded);
-            break;
-        case 'settingsChangeRequested':
-            chrome.tabs.create({
-                url: 'options.htm'
-            });
-            window.close();
-            break;
-        case 'aboutPageRequested':
-            chrome.tabs.create({
-                url: 'http://www.deadboltpasswordgenerator.com/'
-            });
-            break;
-        case 'copyPasswordToClipboard':
-            var message = {
-                command: 'copyPasswordToClipboard',
-                context: { password: event.data.context.password }
-            };
-            chrome.extension.getBackgroundPage().postMessage(message, '*');
-            break;
-        case 'passwordGenerated':
-            var eventLabel = generateEventLabel(event.data.context.selectedProfile);
-            _gaq.push(['_trackEvent', 'Password Generated', event.data.context.method, eventLabel]);
-    }
-}, false);
+//window.addEventListener('message', function (event) {
+//    var command = event.data.command;
+//    switch (command) {
+//        case 'loaded':
+//            retrieveDeadboltSettings(settingsLoaded);
+//            break;
+//        case 'settingsChangeRequested':
+//            chrome.tabs.create({
+//                url: 'options.htm'
+//            });
+//            window.close();
+//            break;
+//        case 'aboutPageRequested':
+//            chrome.tabs.create({
+//                url: 'http://www.deadboltpasswordgenerator.com/'
+//            });
+//            break;
+//        case 'copyPasswordToClipboard':
+//            var message = {
+//                command: 'copyPasswordToClipboard',
+//                context: { password: event.data.context.password }
+//            };
+//            chrome.extension.getBackgroundPage().postMessage(message, '*');
+//            break;
+//        case 'passwordGenerated':
+//            var eventLabel = generateEventLabel(event.data.context.selectedProfile);
+//            _gaq.push(['_trackEvent', 'Password Generated', event.data.context.method, eventLabel]);
+//    }
+//}, false);
 
-function generateEventLabel(profile) {
-    return 'Symbols:' + profile.includeSymbols +
-        '|Length:' + profile.passwordLength +
-        '|CaseSensitive:' + profile.caseSensitive +
-        '|UsePin:' + profile.usePinNumber;
-}
+//function generateEventLabel(profile) {
+//    return 'Symbols:' + profile.includeSymbols +
+//        '|Length:' + profile.passwordLength +
+//        '|CaseSensitive:' + profile.caseSensitive +
+//        '|UsePin:' + profile.usePinNumber;
+//}
 
-function settingsLoaded(deadboltSettings) {
-    var iframe = parent.document.getElementById('popupFrame');
-    var message = {
-        command: 'settings',
-        context: { 'deadboltSettings': deadboltSettings }
+//function settingsLoaded(deadboltSettings) {
+//    var iframe = parent.document.getElementById('popupFrame');
+//    var message = {
+//        command: 'settings',
+//        context: { 'deadboltSettings': deadboltSettings }
+//    };
+//    iframe.contentWindow.postMessage(message, '*');
+//    chrome.extension.getBackgroundPage().postMessage({
+//        command: 'initialize'
+//    }, '*');
+//}
+
+function popupCtrl($scope) {
+
+    $scope.showPassword = false;
+
+    $scope.toggleShowPhrase = function () {
+        $scope.showPassword = !$scope.showPassword;
     };
-    iframe.contentWindow.postMessage(message, '*');
-    chrome.extension.getBackgroundPage().postMessage({
-        command: 'initialize'
-    }, '*');
+
+    $scope.inputPhraseType = function () {
+        return $scope.showPassword ? 'text' : 'password';
+    };
+
+    $scope.openHomePage = function () {
+        window.close();
+        chrome.tabs.create({
+            url: 'http://www.deadboltpasswordgenerator.com/'
+        });
+    };
+
+    $scope.openSettingsPage = function () {
+        window.close();
+        chrome.tabs.create({
+            url: 'options.htm'
+        });
+    };
 }
