@@ -67,15 +67,51 @@
 
 function popupCtrl($scope) {
 
+    $scope.minimumPhraseLength = 6;
+    $scope.memorablePhrase = '';
     $scope.showPassword = false;
+    $scope.copiedToClipboard = false;
+    $scope.password = '';
+    $scope.showingPassword = false;
 
-    $scope.toggleShowPhrase = function () {
-        $scope.showPassword = !$scope.showPassword;
+    retrieveDeadboltSettings(function (value) {
+        $scope.$apply(function () {
+            $scope.load(value);
+        });
+    });
+
+    $scope.load = function settingsLoaded(deadboltSettings) {
+        $scope.profiles = deadboltSettings.simpleProfileList;
+        $scope.selectedProfile = findMatchingProfileByName($scope.profiles, deadboltSettings.defaultProfileName);
     };
 
-    $scope.inputPhraseType = function () {
-        return $scope.showPassword ? 'text' : 'password';
+    $scope.remainingCharacterText = function () {
+        switch ($scope.memorablePhrase.length) {
+            case 0:
+                return 'Enter at least ' + $scope.minimumPhraseLength + ' characters';
+            case $scope.minimumPhraseLength - 1:
+                return 'Enter at least 1 more character';
+            default:
+                return 'Enter at least ' + ($scope.minimumPhraseLength - $scope.memorablePhrase.length) + ' more characters';
+        }
     };
+
+    $scope.buttonsEnabled = function () {
+        return $scope.memorablePhrase.length >= $scope.minimumPhraseLength;
+    };
+
+    $scope.passwordGenerated = function () {
+        return $scope.password.length > 0;
+    };
+
+    $scope.getPasswordCharacter = function (i) {
+        if ($scope.password.length < i) {
+            return '';
+        }
+        return $scope.password.substr(i - 1, 1);
+    };
+
+    // Click Handlers
 
     $scope.openHomePage = function () {
         window.close();
@@ -90,4 +126,31 @@ function popupCtrl($scope) {
             url: 'options.htm'
         });
     };
+
+    $scope.inputPhraseType = function () {
+        return $scope.showPassword ? 'text' : 'password';
+    };
+
+    $scope.revealPassword = function () {
+        $scope.showingPassword = true;
+        $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
+        //self.notifyAnalyticsEvent('Revealed'); TODO: Add analytics back in.
+    };
+
+    $scope.copyPasswordToClipboard = function () {
+        $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
+        $scope.copiedToClipboard = true;
+        var message = {
+            command: 'copyPasswordToClipboard',
+            context: { password: $scope.password }
+        };
+        chrome.extension.getBackgroundPage().postMessage(message, '*');
+        //self.notifyAnalyticsEvent('Copied'); TODO: Add analytics back in.
+    };
+
+    $scope.toggleShowPhrase = function () {
+        $scope.showPassword = !$scope.showPassword;
+    };
+
+    // End Click Handlers
 }

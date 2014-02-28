@@ -25,8 +25,8 @@
     <link href="css/deadbolt.css" rel="stylesheet" media="screen" />
 </head>
 <body>
-    <div id="extension-container" ng-controller="popupCtrl">
 
+    <div id="extension-container" ng-controller="popupCtrl">
         <div id="logo-container">
             <div id="menu" class="btn-toolbar">
                 <button class="btn btn-small btn-inverse" ng-click="openHomePage()" title="Home page"><i class="icon-home icon-white"></i></button>
@@ -35,14 +35,14 @@
         </div>
 
         <div id="entryForm">
-            <div class="click panel circle" ng-class="{flip: passwordGenerated}">
+            <div class="click panel circle" ng-class="{flip: passwordGenerated()}">
                 <div class="front">
                     <div class="form-horizontal">
                         <div class="control-group">
                             <label class="control-label" for="txtProfileName">Profile</label>
                             <div class="controls">
                                 <div class="input-append">
-                                    <select id="txtProfileName" class="span3" data-bind="options: profiles, optionsText: 'name', value: selectedProfile"></select>
+                                    <select id="txtProfileName" ng-model="selectedProfile" ng-options="p.name for p in profiles" class="span3"></select>
                                     <button class="btn" ng-click="openSettingsPage()" title="Options"><i class="icon-cog"></i></button>
                                 </div>
                             </div>
@@ -51,44 +51,44 @@
                             <label class="control-label" for="txtPassphrase">Phrase</label>
                             <div class="controls">
                                 <div class="input-append">
-                                    <input id="txtPassphrase" class="span3" type="{{ inputPhraseType() }}" ng-model="passPhrase" />
+                                    <input id="txtPassphrase" class="span3" type="{{ inputPhraseType() }}" ng-model="memorablePhrase" />
                                     <button class="btn" ng-click="toggleShowPhrase()" title="Show/Hide"><i ng-class="{ 'icon-eye-open': !showPassword, 'icon-eye-close': showPassword }"></i></button>
                                 </div>
                             </div>
                         </div>
                         <div class="control-group">
-                            <div class="controls" data-bind="visible: !buttonsEnabled()">
-                                <small class="muted" data-bind="html: remainingChars"></small>
+                            <div class="controls" ng-show="!buttonsEnabled()">
+                                <small class="muted">{{ remainingCharacterText() }}</small>
                             </div>
-                            <div class="controls" data-bind="visible: buttonsEnabled">
-                                <button class="btn btn-mini btn-primary btn-flat" type="button" data-bind="enable: buttonsEnabled, click: revealPassword">Reveal</button>
-                                <button class="btn btn-mini btn-primary btn-flat" type="button" data-bind="enable: buttonsEnabled, click: copyToClipboard">Copy</button>
+                            <div class="controls" ng-show="buttonsEnabled()">
+                                <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="revealPassword()">Reveal</button>
+                                <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="copyPasswordToClipboard()">Copy</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="back">
-                    <div id="passwordReveal" data-bind="visible: showingPassword">
-                        <div data-bind="text: password" id="fullPassword" onclick="selectNode(this);"></div>
+                    <div id="passwordReveal" ng-show="showingPassword">
+                        <div id="fullPassword" onclick="selectNode(this);">{{ password }}</div>
                         <div id="passChars">
-                            <dl><dt>1</dt><dd data-bind="text: getPasswordCharacter(1)"></dd></dl>
-                            <dl><dt>2</dt><dd data-bind="text: getPasswordCharacter(2)"></dd></dl>
-                            <dl><dt>3</dt><dd data-bind="text: getPasswordCharacter(3)"></dd></dl>
-                            <dl><dt>4</dt><dd data-bind="text: getPasswordCharacter(4)"></dd></dl>
-                            <dl><dt>5</dt><dd data-bind="text: getPasswordCharacter(5)"></dd></dl>
-                            <dl data-bind="visible: selectedProfile().passwordLength > 5"><dt>6</dt><dd data-bind="text: getPasswordCharacter(6)"></dd></dl>
-                            <dl data-bind="visible: selectedProfile().passwordLength > 6"><dt>7</dt><dd data-bind="text: getPasswordCharacter(7)"></dd></dl>
-                            <dl data-bind="visible: selectedProfile().passwordLength > 7"><dt>8</dt><dd data-bind="text: getPasswordCharacter(8)"></dd></dl>
-                            <dl data-bind="visible: selectedProfile().passwordLength > 8"><dt>9</dt><dd data-bind="text: getPasswordCharacter(9)"></dd></dl>
-                            <dl data-bind="visible: selectedProfile().passwordLength > 9"><dt>10</dt><dd data-bind="text: getPasswordCharacter(10)"></dd></dl>
-                            <dl data-bind="visible: selectedProfile().passwordLength > 10"><dt>11</dt><dd data-bind="text: getPasswordCharacter(11)"></dd></dl>
-                            <dl data-bind="visible: selectedProfile().passwordLength > 11"><dt>12</dt><dd data-bind="text: getPasswordCharacter(12)"></dd></dl>
-                            <dl data-bind="visible: selectedProfile().passwordLength > 12"><dt>13</dt><dd data-bind="text: getPasswordCharacter(13)"></dd></dl>
-                            <dl data-bind="visible: selectedProfile().passwordLength > 13"><dt>14</dt><dd data-bind="text: getPasswordCharacter(14)"></dd></dl>
-                            <dl data-bind="visible: selectedProfile().passwordLength > 14"><dt>15</dt><dd data-bind="text: getPasswordCharacter(15)"></dd></dl>
+                            <dl><dt>1</dt><dd>{{ getPasswordCharacter(1) }}</dd></dl>
+                            <dl><dt>2</dt><dd>{{ getPasswordCharacter(2) }}</dd></dl>
+                            <dl><dt>3</dt><dd>{{ getPasswordCharacter(3) }}</dd></dl>
+                            <dl><dt>4</dt><dd>{{ getPasswordCharacter(4) }}</dd></dl>
+                            <dl><dt>5</dt><dd>{{ getPasswordCharacter(5) }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 5"><dt>6</dt><dd>{{ getPasswordCharacter(6) }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 6"><dt>7</dt><dd>{{ getPasswordCharacter(7) }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 7"><dt>8</dt><dd>{{ getPasswordCharacter(8) }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 8"><dt>9</dt><dd>{{ getPasswordCharacter(9) }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 9"><dt>10</dt><dd>{{ getPasswordCharacter(10) }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 10"><dt>11</dt><dd>{{ getPasswordCharacter(11) }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 11"><dt>12</dt><dd>{{ getPasswordCharacter(12) }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 12"><dt>13</dt><dd>{{ getPasswordCharacter(13) }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 13"><dt>14</dt><dd>{{ getPasswordCharacter(14) }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 14"><dt>15</dt><dd>{{ getPasswordCharacter(15) }}</dd></dl>
                         </div>
                     </div>
-                    <div id="passwordCopied" data-bind="visible: copiedToClipboard">
+                    <div id="passwordCopied" ng-show="copiedToClipboard">
                         <p>
                             Password copied to clipboard for ten seconds
                         </p>
@@ -97,8 +97,7 @@
             </div>
 
         </div>
-
-
+        
     </div>
 
     <script type="text/javascript" src="js/angular.min.js"></script>

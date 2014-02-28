@@ -79,3 +79,12 @@ function selectNode(node) {
         range.select();
     }
 }
+
+function findMatchingProfileByName(profiles, name) {
+    for (var i = 0; i < profiles.length; i++) {
+        if (profiles[i].name == name) {
+            return profiles[i]
+        }
+    }
+    return profiles[0];
+}
