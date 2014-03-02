@@ -51,7 +51,7 @@
                             <label class="control-label" for="txtPassphrase">Phrase</label>
                             <div class="controls">
                                 <div class="input-append">
-                                    <input id="txtPassphrase" class="span3" type="{{ inputPhraseType() }}" ng-model="memorablePhrase" />
+                                    <input id="txtPassphrase" class="span3" ng-attr-type="{{inputPhraseType()}}" ng-model="memorablePhrase" />
                                     <button class="btn" ng-click="toggleShowPhrase()" title="Show/Hide"><i ng-class="{ 'icon-eye-open': !showPassword, 'icon-eye-close': showPassword }"></i></button>
                                 </div>
                             </div>
