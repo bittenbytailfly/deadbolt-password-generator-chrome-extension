@@ -65,25 +65,62 @@
 //    }, '*');
 //}
 
-function popupCtrl($scope) {
+var deadboltPasswordGeneratorApp = angular.module('deadboltPasswordGeneratorApp', []);
 
+deadboltPasswordGeneratorApp.factory('settingsRepository', function () {
+    return {
+        getSettings: function (callback) {
+            chrome.storage.sync.get('deadboltSettings', function (r) {
+                var savedSettings = r.deadboltSettings;
+                if (!savedSettings) {
+                    savedSettings = createDefaultDeadboltSettings();
+                }
+                callback(savedSettings);
+            });
+        }
+    }
+});
+
+deadboltPasswordGeneratorApp.directive('dbFocus', function () {
+    return {
+        restrict: 'A',
+        link: function ($scope, $elem, $attrs) {
+            $scope.$watch($attrs.dbFocus, function (newval, oldval) {
+                if (newval) {
+                    $elem[0].focus();
+                }
+            });
+            $elem.bind('blur', function () {
+                $scope.$apply(function () { $scope.$eval(function (scope) { scope.memorablePhraseFocused = false; }); });
+            });
+            $elem.bind('focus', function () {
+                if (!$scope.memorablePhraseFocused) {
+                    $scope.$apply(function () { $scope.$eval(function (scope) { scope.memorablePhraseFocused = true; }); });
+                }
+            });
+	    }
+	}
+});
+
+deadboltPasswordGeneratorApp.controller('popupCtrl', function ($scope) {
     $scope.minimumPhraseLength = 6;
     $scope.memorablePhrase = '';
     $scope.showPassword = false;
     $scope.copiedToClipboard = false;
     $scope.password = '';
     $scope.showingPassword = false;
+    $scope.memorablePhraseFocused = true;
 
-    retrieveDeadboltSettings(function (value) {
+    retrieveDeadboltSettings(function (deadboltSettings) {
         $scope.$apply(function () {
-            $scope.load(value);
+            $scope.profiles = deadboltSettings.simpleProfileList;
+            $scope.selectedProfile = findMatchingProfileByName($scope.profiles, deadboltSettings.defaultProfileName);
         });
     });
 
-    $scope.load = function settingsLoaded(deadboltSettings) {
-        $scope.profiles = deadboltSettings.simpleProfileList;
-        $scope.selectedProfile = findMatchingProfileByName($scope.profiles, deadboltSettings.defaultProfileName);
-    };
+    $scope.$watch('selectedProfile', function () {
+        $scope.memorablePhraseFocused = true;
+    });
 
     $scope.remainingCharacterText = function () {
         switch ($scope.memorablePhrase.length) {
@@ -153,4 +190,4 @@ function popupCtrl($scope) {
     };
 
     // End Click Handlers
-}
+});
