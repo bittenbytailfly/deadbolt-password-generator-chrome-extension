@@ -85,24 +85,24 @@ deadboltPasswordGeneratorApp.directive('dbFocus', function () {
     return {
         restrict: 'A',
         link: function ($scope, $elem, $attrs) {
-            $scope.$watch($attrs.dbFocus, function (newval, oldval) {
+            $scope.$watch($attrs.dbFocus, function (newval) {
                 if (newval) {
                     $elem[0].focus();
                 }
             });
             $elem.bind('blur', function () {
-                $scope.$apply(function () { $scope.$eval(function (scope) { scope.memorablePhraseFocused = false; }); });
+                $scope.$apply(function () { $scope[$attrs.dbFocus] = false; });
             });
             $elem.bind('focus', function () {
-                if (!$scope.memorablePhraseFocused) {
-                    $scope.$apply(function () { $scope.$eval(function (scope) { scope.memorablePhraseFocused = true; }); });
+                if (!$scope[$attrs.dbFocus]) {
+                    $scope.$apply(function () { $scope[$attrs.dbFocus] = true; });
                 }
             });
-	    }
-	}
+        }
+    };
 });
 
-deadboltPasswordGeneratorApp.controller('popupCtrl', function ($scope) {
+deadboltPasswordGeneratorApp.controller('popupCtrl', ['$scope', 'settingsRepository', function ($scope, settingsRepository) {
     $scope.minimumPhraseLength = 6;
     $scope.memorablePhrase = '';
     $scope.showPassword = false;
@@ -111,7 +111,7 @@ deadboltPasswordGeneratorApp.controller('popupCtrl', function ($scope) {
     $scope.showingPassword = false;
     $scope.memorablePhraseFocused = true;
 
-    retrieveDeadboltSettings(function (deadboltSettings) {
+    settingsRepository.getSettings(function (deadboltSettings) {
         $scope.$apply(function () {
             $scope.profiles = deadboltSettings.simpleProfileList;
             $scope.selectedProfile = findMatchingProfileByName($scope.profiles, deadboltSettings.defaultProfileName);
@@ -190,4 +190,4 @@ deadboltPasswordGeneratorApp.controller('popupCtrl', function ($scope) {
     };
 
     // End Click Handlers
-});
+}]);
