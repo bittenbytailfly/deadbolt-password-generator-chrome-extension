@@ -91,6 +91,26 @@ deadboltPasswordGeneratorApp.factory('deadboltSettingsFactory', function () {
     };
 });
 
+deadboltPasswordGeneratorApp.directive('dbHighlight', function () {
+    return {
+        restrict: 'A',
+        link: function (scope, elem, attr) {
+            elem.bind('click', function () {
+                var selection, range, doc, win;
+                if ((doc = elem[0].ownerDocument) && (win = doc.defaultView) && typeof
+                        win.getSelection != 'undefined' && typeof doc.createRange !=
+                        'undefined' && (selection = window.getSelection()) && typeof
+                        selection.removeAllRanges != 'undefined') {
+                    range = doc.createRange();
+                    range.selectNode(elem[0]);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                }
+            });
+        }
+    };
+});
+
 deadboltPasswordGeneratorApp.directive('dbFocus', function () {
     return {
         restrict: 'A',
@@ -156,7 +176,6 @@ deadboltPasswordGeneratorApp.controller('popupCtrl', ['$scope', 'settingsReposit
 
     $scope.$watch('selectedProfile', function () {
         $scope.memorablePhraseFocused = true;
-        console.log('sp: ' + $scope.memorablePhraseFocused);
     });
 
     $scope.remainingCharacterText = function () {
