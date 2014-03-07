@@ -1,36 +1,211 @@
 ﻿<!--
-    Copyright 2012, 2013 Ed Carter
+    Copyright 2012, 2014 Ed Carter
 
     This file is part of Deadbolt Password Generator.
 
-    Deadbolt Password Generator is free software: you can redistribute 
-    it and/or modify it under the terms of the GNU General Public 
-    License as published by the Free Software Foundation, either 
+    Deadbolt Password Generator is free software: you can redistribute
+    it and/or modify it under the terms of the GNU General Public
+    License as published by the Free Software Foundation, either
     version 3 of the License, or (at your option) any later version.
 
-    Deadbolt Password Generator is distributed in the hope that it 
-    will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+    Deadbolt Password Generator is distributed in the hope that it
+    will be useful, but WITHOUT ANY WARRANTY; without even the implied
+    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Deadbolt Password Generator.  If not, see 
+    along with Deadbolt Password Generator.  If not, see
     <http://www.gnu.org/licenses/>.
  -->
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html ng-app="deadboltPasswordGeneratorApp">
 <head>
-    <title>Deadbolt Password Generator - Options</title>
-    <link href="css/container.css" rel="stylesheet" type="text/css" />
-    <style type="text/css">
-        html, body { height: 100%; }
+    <title>Deadbolt</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <style>
+        #entry {
+            width: 550px;
+        }
+
+        .pinNumber select {
+            width: 4em;
+        }
+
+        h1 span {
+            display: none;
+        }
+
+        h1 {
+            width: 198px;
+            height: 42px;
+            background: url('../img/deadbolt-logo.png');
+        }
+
+        .titleBar {
+            background: #414141;
+            margin-bottom: 1em;
+        }
+        .tabTitle {
+            cursor: pointer;
+        }
     </style>
 </head>
-<body>
-    <iframe id="optionsFrame" src="options-frame.htm" width="100%" height="100%"></iframe>
-    <script src="js/profiles.js" type="text/javascript"></script>
-    <script src="js/deadbolt.js" type="text/javascript"></script>
-    <script src="js/options.js" type="text/javascript"></script>
-    <script src="js/tracking.js" type="text/javascript"></script>
+<body ng-controller="settingsCtrl">
+    <div class="titleBar">
+        <div class="container">
+            <h1><span>Deadbolt Password Generator</span></h1>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="well">
+            <button type="button" class="btn btn-primary" ng-click="createProfile">Add Profile</button>
+            <div class="form-horizontal pull-right">
+                <div class="control-group">
+                    <label class="control-label" for="ddDefaultProfile">Default Profile</label>
+                    <div class="controls">
+                        <select ng-options="p.name as p.name for p in profiles" ng-model="defaultProfileName"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabbable">
+            <!-- Only required for left/right tabs -->
+            <ul id="profileTabs" class="nav nav-tabs">
+                <li ng-repeat="p in profiles" ng-class="{active: activeTab == $index}" ng-click="setActiveTab($index)">
+                    <a class="tabTitle">
+                        <span class="close" ng-show="$index != 0" ng-click="removeProfile($index)">&times;</span>
+                        <span>{{ p.name }}</span>&nbsp;
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+
+                <div class="tab-pane" ng-repeat="p in profiles" ng-class="{active: activeTab == $index}">
+
+                    <div class="form-horizontal">
+
+                        <div class="control-group">
+                            <label class="control-label" for="name">Name</label>
+                            <div class="controls">
+                                <input type="text" id="name" ng-model="p.name" />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="inputEmail">Include Symbols</label>
+                            <div class="controls">
+                                <toggle-button ng-model="p.includeSymbols"></toggle-button>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="inputPassword">Case Sensitive</label>
+                            <div class="controls">
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button type="button" class="btn" data-bind="click: toggleCaseSensitive, css: { active: caseSensitive }">Yes</button>
+                                    <button type="button" class="btn" data-bind="click: toggleCaseSensitive, css: { active: !caseSensitive() }">No</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="inputPassword">Use Pin Number</label>
+                            <div class="controls">
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button type="button" class="btn" data-bind="click: toggleUsePinNumber, css: { active: usePinNumber }">Yes</button>
+                                    <button type="button" class="btn" data-bind="click: toggleUsePinNumber, css: { active: !usePinNumber() }">No</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-group" data-bind="visible: usePinNumber">
+                            <label class="control-label" for="inputPassword">Pin Number</label>
+                            <div class="controls pinNumber">
+                                <select data-bind="value: pin1">
+                                    <option>0</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                </select>
+                                <select data-bind="value: pin2">
+                                    <option>0</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                </select>
+                                <select data-bind="value: pin3">
+                                    <option>0</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                </select>
+                                <select data-bind="value: pin4">
+                                    <option>0</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="passwordLength">Password Length</label>
+                            <div class="controls">
+                                <input id="passwordLength" type="range" min="5" max="15" step="1" data-bind="value: passwordLength" />
+                                <span data-bind="text: passwordLength"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- /ko -->
+
+            </div>
+
+            <div class="well" data-bind="visible: changesMade">
+                <button type="button" class="btn btn-primary" data-bind="click: save">Save</button>
+                Your changes have not yet been saved
+            </div>
+
+        </div>
+
+    </div>
+
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/profiles.js"></script>
+    <script type="text/javascript" src="js/deadbolt.js"></script>
+    <script type="text/javascript" src="js/popup.js"></script>
+
 </body>
 </html>

@@ -102,6 +102,23 @@ deadboltPasswordGeneratorApp.directive('dbFocus', function () {
     };
 });
 
+deadboltPasswordGeneratorApp.directive('toggleButton', function ($compile) {
+    return {
+        restrict: 'E',
+        replace: true,
+        template: '<div class="btn-group">' +
+                    '<button type="button" class="btn" data-value="true">Yes</button>' +
+                    '<button type="button" class="btn" data-value="false">No</button>' +
+                  '</div>',
+        compile: function (elem, attr) {
+            var buttons = elem.find('button')
+            for (var i = 0; i < buttons.length; i++) {
+                $(buttons[i]).attr('ng-click', attr.ngModel + "=" + $(buttons[i]).data("value"));
+            }
+        }
+    };
+});
+
 deadboltPasswordGeneratorApp.controller('popupCtrl', ['$scope', 'settingsRepository', function ($scope, settingsRepository) {
     $scope.minimumPhraseLength = 6;
     $scope.memorablePhrase = '';
@@ -190,4 +207,41 @@ deadboltPasswordGeneratorApp.controller('popupCtrl', ['$scope', 'settingsReposit
     };
 
     // End Click Handlers
+}]);
+
+deadboltPasswordGeneratorApp.controller('settingsCtrl', ['$scope', 'settingsRepository', function ($scope, settingsRepository) {
+
+    settingsRepository.getSettings(function (deadboltSettings) {
+        $scope.$apply(function () {
+            $scope.profiles = deadboltSettings.simpleProfileList;
+            $scope.defaultProfileName = deadboltSettings.defaultProfileName;
+        });
+    });
+
+    $scope.createProfile = function () {
+
+    };
+
+    $scope.activeTab = 0;
+
+    $scope.setActiveTab = function (i) {
+        $scope.activeTab = i;
+    };
+
+    $scope.removeProfile = function (i) {
+        $scope.profiles.splice(i, 1);
+        var profileCount = $scope.profiles.length;
+        if (i < $scope.activeTab) {
+            $scope.activeTab--;
+        }
+        else if (i == $scope.activeTab) {
+            if (i == profileCount) {
+                $scope.activeTab = profileCount - 1;
+            }
+            else {
+                $scope.activeTab = i;
+            }
+        }
+    };
+
 }]);
