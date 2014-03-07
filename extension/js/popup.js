@@ -84,37 +84,46 @@ deadboltPasswordGeneratorApp.factory('settingsRepository', function () {
 deadboltPasswordGeneratorApp.directive('dbFocus', function () {
     return {
         restrict: 'A',
-        link: function ($scope, $elem, $attrs) {
-            $scope.$watch($attrs.dbFocus, function (newval) {
+        scope: {
+            dbFocus: '='
+        },
+        link: function(scope, elem, attrs) {
+            scope.$watch('dbFocus', function(newval, oldval) {
                 if (newval) {
-                    $elem[0].focus();
+                    elem[0].focus();
                 }
+            }, true);
+            elem.bind('blur', function () {
+                scope.$apply(function() { scope.dbFocus = false; });
             });
-            $elem.bind('blur', function () {
-                $scope.$apply(function () { $scope[$attrs.dbFocus] = false; });
-            });
-            $elem.bind('focus', function () {
-                if (!$scope[$attrs.dbFocus]) {
-                    $scope.$apply(function () { $scope[$attrs.dbFocus] = true; });
+            elem.bind('focus', function() {
+                if (!scope.dbFocus) {
+                    scope.$apply(function() { scope.dbFocus = true; });
                 }
             });
         }
     };
 });
 
-deadboltPasswordGeneratorApp.directive('toggleButton', function ($compile) {
+deadboltPasswordGeneratorApp.directive('toggleButton', function () {
     return {
         restrict: 'E',
         replace: true,
         template: '<div class="btn-group">' +
-                    '<button type="button" class="btn" data-value="true">Yes</button>' +
-                    '<button type="button" class="btn" data-value="false">No</button>' +
+                    '<button type="button" class="btn" ng-class="{active: yes}" ng-click="click(true)">Yes</button>' +
+                    '<button type="button" class="btn" ng-class="{active: no}" ng-click="click(false)">No</button>' +
                   '</div>',
-        compile: function (elem, attr) {
-            var buttons = elem.find('button')
-            for (var i = 0; i < buttons.length; i++) {
-                $(buttons[i]).attr('ng-click', attr.ngModel + "=" + $(buttons[i]).data("value"));
-            }
+        scope: {
+             ngModel: '='
+        },
+        link: function(scope, element, attr) {
+            scope.click = function(value) {
+                scope.ngModel = value;
+            };
+            scope.$watch('ngModel', function() {
+                scope.yes = scope.ngModel;
+                scope.no = !scope.ngModel;
+            });
         }
     };
 });
