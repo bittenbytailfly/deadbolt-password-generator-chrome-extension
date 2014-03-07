@@ -77,6 +77,50 @@ deadboltPasswordGeneratorApp.factory('settingsRepository', function () {
                 }
                 callback(savedSettings);
             });
+        },
+        saveSettings: function (deadboltSettings, callback) {
+            deadboltSettings.simpleProfileList.sort(function (a, b) { return a.name.localeCompare(b.name); });
+            chrome.storage.sync.set({ 'deadboltSettings': deadboltSettings }, function () {
+                if (callback != null) {
+                    callback();
+                }
+            });
+        }
+    };
+});
+
+deadboltPasswordGeneratorApp.factory('deadboltSettingsFactory', function () {
+    return {
+        createDefaultDeadboltSettings: function () {
+            var simpleProfileList = new Array();
+            var defaultSimpleProfile = new simpleProfile('Default', true, true, false, '0', '0', '0', '0', 15);
+            simpleProfileList.push(defaultSimpleProfile);
+            var settings = new deadboltSettings('Default', simpleProfileList);
+            saveDeadboltSettings(settings);
+            return settings;
+        },
+        deadboltSettings: function (defaultProfileName, simpleProfileList) {
+            this.defaultProfileName = defaultProfileName;
+            this.simpleProfileList = simpleProfileList;
+        },
+        simpleProfile: function (name, includeSymbols, caseSensitive, usePinNumber, pin1, pin2, pin3, pin4, passwordLength) {
+            this.name = name;
+            this.includeSymbols = includeSymbols;
+            this.caseSensitive = caseSensitive;
+            this.usePinNumber = usePinNumber;
+            this.pin1 = pin1;
+            this.pin2 = pin2;
+            this.pin3 = pin3;
+            this.pin4 = pin4;
+            this.passwordLength = passwordLength;
+        },
+        findMatchingProfileByName: function (profiles, name) {
+            for (var i = 0; i < profiles.length; i++) {
+                if (profiles[i].name == name) {
+                    return profiles[i]
+                }
+            }
+            return profiles[0];
         }
     };
 });
@@ -128,7 +172,7 @@ deadboltPasswordGeneratorApp.directive('toggleButton', function () {
     };
 });
 
-deadboltPasswordGeneratorApp.controller('popupCtrl', ['$scope', 'settingsRepository', function ($scope, settingsRepository) {
+deadboltPasswordGeneratorApp.controller('popupCtrl', ['$scope', 'settingsRepository', 'deadboltSettingsFactory', function ($scope, settingsRepository, deadboltSettingsFactory) {
     $scope.minimumPhraseLength = 6;
     $scope.memorablePhrase = '';
     $scope.showPassword = false;
@@ -140,7 +184,7 @@ deadboltPasswordGeneratorApp.controller('popupCtrl', ['$scope', 'settingsReposit
     settingsRepository.getSettings(function (deadboltSettings) {
         $scope.$apply(function () {
             $scope.profiles = deadboltSettings.simpleProfileList;
-            $scope.selectedProfile = findMatchingProfileByName($scope.profiles, deadboltSettings.defaultProfileName);
+            $scope.selectedProfile = deadboltSettingsFactory.findMatchingProfileByName($scope.profiles, deadboltSettings.defaultProfileName);
         });
     });
 
@@ -219,7 +263,7 @@ deadboltPasswordGeneratorApp.controller('popupCtrl', ['$scope', 'settingsReposit
     // End Click Handlers
 }]);
 
-deadboltPasswordGeneratorApp.controller('settingsCtrl', ['$scope', 'settingsRepository', function ($scope, settingsRepository) {
+deadboltPasswordGeneratorApp.controller('settingsCtrl', ['$scope', 'settingsRepository', 'deadboltSettingsFactory', function ($scope, settingsRepository, deadboltSettingsFactory) {
 
     settingsRepository.getSettings(function (deadboltSettings) {
         $scope.$apply(function () {
@@ -236,8 +280,7 @@ deadboltPasswordGeneratorApp.controller('settingsCtrl', ['$scope', 'settingsRepo
     }, true);
 
     $scope.createProfile = function () {
-        var p = new simpleProfile('Profile ' + ($scope.profiles.length + 1), false, false, false, '0', '0', '0', '0', 15);
-        console.log(p);
+        var p = new deadboltSettingsFactory.simpleProfile('Profile ' + ($scope.profiles.length + 1), false, false, false, '0', '0', '0', '0', 15);
         $scope.profiles.push(p);
         $scope.activeTab = $scope.profiles.length - 1;
     };
@@ -249,6 +292,7 @@ deadboltPasswordGeneratorApp.controller('settingsCtrl', ['$scope', 'settingsRepo
     };
 
     $scope.removeProfile = function (i) {
+        var deletedProfileName = $scope.profiles[i].name;
         $scope.profiles.splice(i, 1);
         var profileCount = $scope.profiles.length;
         if (i < $scope.activeTab) {
@@ -262,6 +306,10 @@ deadboltPasswordGeneratorApp.controller('settingsCtrl', ['$scope', 'settingsRepo
                 $scope.activeTab = i;
             }
         }
+        if (deletedProfileName == $scope.defaultProfileName) {
+            // The default profile has been erased.
+            $scope.defaultProfileName = $scope.profiles[0].name;
+        };
     };
 
     $scope.save = function() {
