@@ -69,8 +69,8 @@ var deadboltPasswordGeneratorApp = angular.module('deadboltPasswordGeneratorApp'
 
 deadboltPasswordGeneratorApp.factory('settingsRepository', function () {
     return {
-        getSettings: function (callback) {
-            chrome.storage.sync.get('deadboltSettings', function (r) {
+        getSettings: function(callback) {
+            chrome.storage.sync.get('deadboltSettings', function(r) {
                 var savedSettings = r.deadboltSettings;
                 if (!savedSettings) {
                     savedSettings = createDefaultDeadboltSettings();
@@ -78,7 +78,7 @@ deadboltPasswordGeneratorApp.factory('settingsRepository', function () {
                 callback(savedSettings);
             });
         }
-    }
+    };
 });
 
 deadboltPasswordGeneratorApp.directive('dbFocus', function () {
@@ -96,7 +96,7 @@ deadboltPasswordGeneratorApp.directive('dbFocus', function () {
             elem.bind('blur', function () {
                 scope.$apply(function() { scope.dbFocus = false; });
             });
-            elem.bind('focus', function() {
+            elem.bind('focus', function () {
                 if (!scope.dbFocus) {
                     scope.$apply(function() { scope.dbFocus = true; });
                 }
@@ -146,6 +146,7 @@ deadboltPasswordGeneratorApp.controller('popupCtrl', ['$scope', 'settingsReposit
 
     $scope.$watch('selectedProfile', function () {
         $scope.memorablePhraseFocused = true;
+        console.log('sp: ' + $scope.memorablePhraseFocused);
     });
 
     $scope.remainingCharacterText = function () {
@@ -225,10 +226,20 @@ deadboltPasswordGeneratorApp.controller('settingsCtrl', ['$scope', 'settingsRepo
             $scope.profiles = deadboltSettings.simpleProfileList;
             $scope.defaultProfileName = deadboltSettings.defaultProfileName;
         });
+        $scope.$apply(function () {
+            $scope.changesMade = false;
+        });
     });
 
-    $scope.createProfile = function () {
+    $scope.$watch('profiles', function() {
+        $scope.changesMade = true;
+    }, true);
 
+    $scope.createProfile = function () {
+        var p = new simpleProfile('Profile ' + ($scope.profiles.length + 1), false, false, false, '0', '0', '0', '0', 15);
+        console.log(p);
+        $scope.profiles.push(p);
+        $scope.activeTab = $scope.profiles.length - 1;
     };
 
     $scope.activeTab = 0;
@@ -251,6 +262,10 @@ deadboltPasswordGeneratorApp.controller('settingsCtrl', ['$scope', 'settingsRepo
                 $scope.activeTab = i;
             }
         }
+    };
+
+    $scope.save = function() {
+        $scope.changesMade = false;
     };
 
 }]);

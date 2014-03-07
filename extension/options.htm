@@ -1,4 +1,4 @@
-﻿<!--
+<!--
     Copyright 2012, 2014 Ed Carter
 
     This file is part of Deadbolt Password Generator.
@@ -59,7 +59,7 @@
     <div class="container">
 
         <div class="well">
-            <button type="button" class="btn btn-primary" ng-click="createProfile">Add Profile</button>
+            <button type="button" class="btn btn-primary" ng-click="createProfile()">Add Profile</button>
             <div class="form-horizontal pull-right">
                 <div class="control-group">
                     <label class="control-label" for="ddDefaultProfile">Default Profile</label>
@@ -97,34 +97,28 @@
                         <div class="control-group">
                             <label class="control-label" for="inputEmail">Include Symbols</label>
                             <div class="controls">
-                                <toggle-button ng-model="p.includeSymbols"></toggle-button>
+                                <toggle-button ng-model="p.includeSymbols" db-model="p.includeSymbols"></toggle-button>
                             </div>
                         </div>
 
                         <div class="control-group">
                             <label class="control-label" for="inputPassword">Case Sensitive</label>
                             <div class="controls">
-                                <div class="btn-group" data-toggle="buttons-radio">
-                                    <button type="button" class="btn" data-bind="click: toggleCaseSensitive, css: { active: caseSensitive }">Yes</button>
-                                    <button type="button" class="btn" data-bind="click: toggleCaseSensitive, css: { active: !caseSensitive() }">No</button>
-                                </div>
+                               <toggle-button ng-model="p.caseSensitive"></toggle-button>
                             </div>
                         </div>
 
                         <div class="control-group">
                             <label class="control-label" for="inputPassword">Use Pin Number</label>
                             <div class="controls">
-                                <div class="btn-group" data-toggle="buttons-radio">
-                                    <button type="button" class="btn" data-bind="click: toggleUsePinNumber, css: { active: usePinNumber }">Yes</button>
-                                    <button type="button" class="btn" data-bind="click: toggleUsePinNumber, css: { active: !usePinNumber() }">No</button>
-                                </div>
+                                <toggle-button ng-model="p.usePinNumber"></toggle-button>
                             </div>
                         </div>
 
-                        <div class="control-group" data-bind="visible: usePinNumber">
+                        <div class="control-group" ng-show="p.usePinNumber">
                             <label class="control-label" for="inputPassword">Pin Number</label>
                             <div class="controls pinNumber">
-                                <select data-bind="value: pin1">
+                                <select ng-model="p.pin1">
                                     <option>0</option>
                                     <option>1</option>
                                     <option>2</option>
@@ -136,7 +130,7 @@
                                     <option>8</option>
                                     <option>9</option>
                                 </select>
-                                <select data-bind="value: pin2">
+                                <select ng-model="p.pin2">
                                     <option>0</option>
                                     <option>1</option>
                                     <option>2</option>
@@ -148,7 +142,7 @@
                                     <option>8</option>
                                     <option>9</option>
                                 </select>
-                                <select data-bind="value: pin3">
+                                <select ng-model="p.pin3">
                                     <option>0</option>
                                     <option>1</option>
                                     <option>2</option>
@@ -160,7 +154,7 @@
                                     <option>8</option>
                                     <option>9</option>
                                 </select>
-                                <select data-bind="value: pin4">
+                                <select ng-model="p.pin4">
                                     <option>0</option>
                                     <option>1</option>
                                     <option>2</option>
@@ -178,8 +172,8 @@
                         <div class="control-group">
                             <label class="control-label" for="passwordLength">Password Length</label>
                             <div class="controls">
-                                <input id="passwordLength" type="range" min="5" max="15" step="1" data-bind="value: passwordLength" />
-                                <span data-bind="text: passwordLength"></span>
+                                <input id="passwordLength" type="range" min="5" max="15" step="1" ng-model="p.passwordLength" data-bind="value: passwordLength" />
+                                <span>{{p.passwordLength}}</span>
                             </div>
                         </div>
 
@@ -187,12 +181,10 @@
 
                 </div>
 
-                <!-- /ko -->
-
             </div>
 
-            <div class="well" data-bind="visible: changesMade">
-                <button type="button" class="btn btn-primary" data-bind="click: save">Save</button>
+            <div class="well" ng-show="changesMade">
+                <button type="button" class="btn btn-primary" ng-click="save()">Save</button>
                 Your changes have not yet been saved
             </div>
 
@@ -200,8 +192,6 @@
 
     </div>
 
-    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/angular.min.js"></script>
     <script type="text/javascript" src="js/profiles.js"></script>
     <script type="text/javascript" src="js/deadbolt.js"></script>
