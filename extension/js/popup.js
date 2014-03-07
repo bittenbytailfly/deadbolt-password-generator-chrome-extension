@@ -16,55 +16,6 @@
 //    along with Deadbolt Password Generator.  If not, see 
 //    <http://www.gnu.org/licenses/>.
 
-//window.addEventListener('message', function (event) {
-//    var command = event.data.command;
-//    switch (command) {
-//        case 'loaded':
-//            retrieveDeadboltSettings(settingsLoaded);
-//            break;
-//        case 'settingsChangeRequested':
-//            chrome.tabs.create({
-//                url: 'options.htm'
-//            });
-//            window.close();
-//            break;
-//        case 'aboutPageRequested':
-//            chrome.tabs.create({
-//                url: 'http://www.deadboltpasswordgenerator.com/'
-//            });
-//            break;
-//        case 'copyPasswordToClipboard':
-//            var message = {
-//                command: 'copyPasswordToClipboard',
-//                context: { password: event.data.context.password }
-//            };
-//            chrome.extension.getBackgroundPage().postMessage(message, '*');
-//            break;
-//        case 'passwordGenerated':
-//            var eventLabel = generateEventLabel(event.data.context.selectedProfile);
-//            _gaq.push(['_trackEvent', 'Password Generated', event.data.context.method, eventLabel]);
-//    }
-//}, false);
-
-//function generateEventLabel(profile) {
-//    return 'Symbols:' + profile.includeSymbols +
-//        '|Length:' + profile.passwordLength +
-//        '|CaseSensitive:' + profile.caseSensitive +
-//        '|UsePin:' + profile.usePinNumber;
-//}
-
-//function settingsLoaded(deadboltSettings) {
-//    var iframe = parent.document.getElementById('popupFrame');
-//    var message = {
-//        command: 'settings',
-//        context: { 'deadboltSettings': deadboltSettings }
-//    };
-//    iframe.contentWindow.postMessage(message, '*');
-//    chrome.extension.getBackgroundPage().postMessage({
-//        command: 'initialize'
-//    }, '*');
-//}
-
 var deadboltPasswordGeneratorApp = angular.module('deadboltPasswordGeneratorApp', []);
 
 deadboltPasswordGeneratorApp.factory('settingsRepository', function () {
@@ -87,6 +38,21 @@ deadboltPasswordGeneratorApp.factory('settingsRepository', function () {
             });
         }
     };
+});
+
+deadboltPasswordGeneratorApp.factory('analyticsService', function () {
+    return {
+        generateEventLabel: function (p) {
+            return 'Symbols:' + p.includeSymbols +
+                '|Length:' + p.passwordLength +
+                '|CaseSensitive:' + p.caseSensitive +
+                '|UsePin:' + p.usePinNumber;
+        },
+        postEvent: function (method, selectedProfile) {
+            var eventLabel = this.generateEventLabel(selectedProfile);
+            _gaq.push(['_trackEvent', 'Password Generated', method, eventLabel]);
+        }
+    }
 });
 
 deadboltPasswordGeneratorApp.factory('deadboltSettingsFactory', function () {
@@ -172,7 +138,7 @@ deadboltPasswordGeneratorApp.directive('toggleButton', function () {
     };
 });
 
-deadboltPasswordGeneratorApp.controller('popupCtrl', ['$scope', 'settingsRepository', 'deadboltSettingsFactory', function ($scope, settingsRepository, deadboltSettingsFactory) {
+deadboltPasswordGeneratorApp.controller('popupCtrl', ['$scope', 'settingsRepository', 'deadboltSettingsFactory', 'analyticsService', function ($scope, settingsRepository, deadboltSettingsFactory, analyticsService) {
     $scope.minimumPhraseLength = 6;
     $scope.memorablePhrase = '';
     $scope.showPassword = false;
@@ -242,7 +208,7 @@ deadboltPasswordGeneratorApp.controller('popupCtrl', ['$scope', 'settingsReposit
     $scope.revealPassword = function () {
         $scope.showingPassword = true;
         $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
-        //self.notifyAnalyticsEvent('Revealed'); TODO: Add analytics back in.
+        analyticsService.postEvent('Revealed', $scope.selectedProfile);
     };
 
     $scope.copyPasswordToClipboard = function () {
@@ -253,7 +219,7 @@ deadboltPasswordGeneratorApp.controller('popupCtrl', ['$scope', 'settingsReposit
             context: { password: $scope.password }
         };
         chrome.extension.getBackgroundPage().postMessage(message, '*');
-        //self.notifyAnalyticsEvent('Copied'); TODO: Add analytics back in.
+        analyticsService.postEvent('Copied', $scope.selectedProfile);
     };
 
     $scope.toggleShowPhrase = function () {
@@ -312,8 +278,13 @@ deadboltPasswordGeneratorApp.controller('settingsCtrl', ['$scope', 'settingsRepo
         };
     };
 
-    $scope.save = function() {
-        $scope.changesMade = false;
+    $scope.save = function () {
+        var deadboltSettings = new deadboltSettingsFactory.deadboltSettings($scope.defaultProfileName, $scope.profiles);
+        settingsRepository.saveSettings(deadboltSettings, $scope.saveComplete);
+    };
+
+    $scope.saveComplete = function () {
+        $scope.$apply(function() { $scope.changesMade = false });
     };
 
 }]);
