@@ -93,60 +93,64 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
 
     .controller('settingsCtrl', function ($scope, settingsRepository, deadboltSettingsFactory) {
 
-    settingsRepository.getSettings(function (deadboltSettings) {
-        $scope.$apply(function () {
-            $scope.profiles = deadboltSettings.simpleProfileList;
-            $scope.defaultProfileName = deadboltSettings.defaultProfileName;
+        settingsRepository.getSettings(function (deadboltSettings) {
+            $scope.$apply(function () {
+                $scope.profiles = deadboltSettings.simpleProfileList;
+                $scope.defaultProfileName = deadboltSettings.defaultProfileName;
+            });
+            $scope.$apply(function () {
+                $scope.changesMade = false;
+            });
         });
-        $scope.$apply(function () {
-            $scope.changesMade = false;
-        });
-    });
 
-    $scope.$watch('profiles', function() {
-        $scope.changesMade = true;
-    }, true);
+        $scope.$watch('profiles', function() {
+            $scope.changesMade = true;
+        }, true);
 
-    $scope.createProfile = function () {
-        var p = new deadboltSettingsFactory.simpleProfile('Profile ' + ($scope.profiles.length + 1), false, false, false, '0', '0', '0', '0', 15);
-        $scope.profiles.push(p);
-        $scope.activeTab = $scope.profiles.length - 1;
-    };
+        $scope.$watch('defaultProfileName', function () {
+            $scope.changesMade = true;
+        }, true);
 
-    $scope.activeTab = 0;
-
-    $scope.setActiveTab = function (i) {
-        $scope.activeTab = i;
-    };
-
-    $scope.removeProfile = function (i) {
-        var deletedProfileName = $scope.profiles[i].name;
-        $scope.profiles.splice(i, 1);
-        var profileCount = $scope.profiles.length;
-        if (i < $scope.activeTab) {
-            $scope.activeTab--;
-        }
-        else if (i == $scope.activeTab) {
-            if (i == profileCount) {
-                $scope.activeTab = profileCount - 1;
-            }
-            else {
-                $scope.activeTab = i;
-            }
-        }
-        if (deletedProfileName == $scope.defaultProfileName) {
-            // The default profile has been erased.
-            $scope.defaultProfileName = $scope.profiles[0].name;
+        $scope.createProfile = function () {
+            var p = new deadboltSettingsFactory.simpleProfile('Profile ' + ($scope.profiles.length + 1), false, false, false, '0', '0', '0', '0', 15);
+            $scope.profiles.push(p);
+            $scope.activeTab = $scope.profiles.length - 1;
         };
-    };
 
-    $scope.save = function () {
-        var deadboltSettings = new deadboltSettingsFactory.deadboltSettings($scope.defaultProfileName, $scope.profiles);
-        settingsRepository.saveSettings(deadboltSettings, $scope.saveComplete);
-    };
+        $scope.activeTab = 0;
 
-    $scope.saveComplete = function () {
-        $scope.$apply(function() { $scope.changesMade = false });
-    };
+        $scope.setActiveTab = function (i) {
+            $scope.activeTab = i;
+        };
 
-});
+        $scope.removeProfile = function (i) {
+            var deletedProfileName = $scope.profiles[i].name;
+            $scope.profiles.splice(i, 1);
+            var profileCount = $scope.profiles.length;
+            if (i < $scope.activeTab) {
+                $scope.activeTab--;
+            }
+            else if (i == $scope.activeTab) {
+                if (i == profileCount) {
+                    $scope.activeTab = profileCount - 1;
+                }
+                else {
+                    $scope.activeTab = i;
+                }
+            }
+            if (deletedProfileName == $scope.defaultProfileName) {
+                // The default profile has been erased.
+                $scope.defaultProfileName = $scope.profiles[0].name;
+            };
+        };
+
+        $scope.save = function () {
+            var deadboltSettings = new deadboltSettingsFactory.deadboltSettings($scope.defaultProfileName, $scope.profiles);
+            settingsRepository.saveSettings(deadboltSettings, $scope.saveComplete);
+        };
+
+        $scope.saveComplete = function () {
+            $scope.$apply(function() { $scope.changesMade = false });
+        };
+
+    });
