@@ -149,3 +149,23 @@ h1
     padding-top: 50px;
     text-align: center;
 }
+
+#entry {
+    width: 550px;
+}
+
+.pinNumber select {
+    width: 4em;
+}
+.titleBar {
+    background: #414141;
+    margin-bottom: 1em;
+}
+.tabTitle {
+    cursor: pointer;
+}
+
+.options-label
+{
+    width: 160px !important;
+}

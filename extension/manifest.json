@@ -21,11 +21,5 @@
       "default_popup": "popup.htm"
   },
   "options_page": "options.htm",
-  "manifest_version": 2,
-  "sandbox": {
-    "pages": [ 
-        "popup-frame.htm", 
-        "options-frame.htm" 
-    ]
-  }
+  "manifest_version": 2
 }
