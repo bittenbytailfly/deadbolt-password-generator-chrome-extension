@@ -54,7 +54,7 @@ angular.module('deadboltPasswordGeneratorApp.services', [])
                 var eventLabel = this.generateEventLabel(selectedProfile);
                 _gaq.push(['_trackEvent', 'Password Generated', method, eventLabel]);
             }
-        }
+        };
     })
     .factory('deadboltSettingsFactory', function () {
         return {
