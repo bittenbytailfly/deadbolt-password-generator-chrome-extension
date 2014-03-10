@@ -104,6 +104,20 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
             analyticsService.postEvent('Copied', $scope.selectedProfile);
         };
 
+        $scope.injectPassword = function () {
+            console.log('attempting inject');
+            $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
+            $scope.copiedToClipboard = true;
+            var message = {
+                command: 'injectPassword',
+                context: { password: $scope.password }
+            };
+            chrome.runtime.sendMessage(message, function (response) {
+                console.log(response.farewell);
+            });
+            analyticsService.postEvent('Injected', $scope.selectedProfile);
+        };
+
         $scope.toggleShowPhrase = function () {
             $scope.showPassword = !$scope.showPassword;
         };

@@ -33,8 +33,19 @@ window.addEventListener('message', function (event) {
             setClipboardValue(' ');
             chrome.browserAction.setBadgeText({ text: '' });
             break;
+        case 'injectPassword':
+            console.log(sender);
+            chrome.tabs.executeScript(null, { code: "inject-password.js" });
     }
 }, false);
+
+chrome.runtime.onMessage.addListener(
+  function (request, sender, sendResponse) {
+      chrome.tabs.executeScript(null, { file: "js/inject-password.js" });
+      console.log(sender);
+    if (request.greeting == "hello")
+      sendResponse({farewell: "goodbye"});
+  });
 
 function setClipboardValue(text) {
     var txt = document.createElement('textarea');
