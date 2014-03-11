@@ -21,15 +21,17 @@
 'use strict';
 
 angular.module('deadboltPasswordGeneratorApp.services', [])
-    .factory('settingsRepository', function () {
+    .factory('settingsRepository', function (deadboltSettingsFactory) {
         return {
             getSettings: function (callback) {
+                var self = this;
                 chrome.storage.sync.get('deadboltSettings', function (r) {
                     var savedSettings = r.deadboltSettings;
                     if (!savedSettings) {
-                        savedSettings = createDefaultDeadboltSettings();
+                        savedSettings = deadboltSettingsFactory.createDefaultDeadboltSettings();
+                        self.saveSettings(savedSettings);
                     }
-                    callback(savedSettings);
+                    callback(savedSettings, null);
                 });
             },
             saveSettings: function (deadboltSettings, callback) {
@@ -60,10 +62,9 @@ angular.module('deadboltPasswordGeneratorApp.services', [])
         return {
             createDefaultDeadboltSettings: function () {
                 var simpleProfileList = new Array();
-                var defaultSimpleProfile = new simpleProfile('Default', true, true, false, '0', '0', '0', '0', 15);
+                var defaultSimpleProfile = new this.simpleProfile('Default', true, true, false, '0', '0', '0', '0', 15);
                 simpleProfileList.push(defaultSimpleProfile);
-                var settings = new deadboltSettings('Default', simpleProfileList);
-                saveDeadboltSettings(settings);
+                var settings = new this.deadboltSettings('Default', simpleProfileList);
                 return settings;
             },
             deadboltSettings: function (defaultProfileName, simpleProfileList) {
