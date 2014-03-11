@@ -18,9 +18,12 @@
     <http://www.gnu.org/licenses/>.
  */
 
-var inputs = document.getElementsByTagName("input");
-for (var i = 0; i < inputs.length; i++) {
-    if (inputs[i].type.toLowerCase() === "password") {
-        console.log('found one');
+function injectPasswords(password) {
+    console.log('test');
+    var inputs = document.getElementsByTagName("input");
+    for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].type.toLowerCase() === "password") {
+            console.log('found one');
+        }
     }
-}
+};

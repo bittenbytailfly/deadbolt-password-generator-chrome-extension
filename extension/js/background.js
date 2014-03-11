@@ -38,7 +38,11 @@ window.addEventListener('message', function (event) {
 
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
-      chrome.tabs.executeScript(null, { 'file': '/js/inject-password.js' });
+      console.log('outer');
+      console.log(sender);
+      chrome.tabs.executeScript(null, { 'file': '/js/inject-password.js' }, function () {
+          chrome.tabs.executeScript(null, { code: 'injectPasswords("test");' });
+      });
       console.log(sender);
       console.log(chrome.runtime.lastError);
     if (request.greeting == 'hello')
