@@ -18,4 +18,9 @@
     <http://www.gnu.org/licenses/>.
  */
 
-document.body.style.backgroundColor = '#f00';
+var inputs = document.getElementsByTagName("input");
+for (var i = 0; i < inputs.length; i++) {
+    if (inputs[i].type.toLowerCase() === "password") {
+        console.log('found one');
+    }
+}
