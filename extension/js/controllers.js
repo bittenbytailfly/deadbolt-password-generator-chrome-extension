@@ -21,7 +21,7 @@
 'use strict';
 
 angular.module('deadboltPasswordGeneratorApp.controllers', [])
-    .controller('popupCtrl', function ($scope, settingsRepository, deadboltSettingsFactory) {
+    .controller('popupCtrl', function ($scope, settingsRepository, deadboltSettingsFactory, analyticsService) {
         $scope.minimumPhraseLength = 6;
         $scope.memorablePhrase = '';
         $scope.showPassword = false;
