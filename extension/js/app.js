@@ -1,4 +1,4 @@
-﻿/*    
+/*    
     Copyright 2012, 2014 Ed Carter
 
     This file is part of Deadbolt Password Generator.
@@ -20,4 +20,4 @@
 
 'use strict';
 
-angular.module('deadboltPasswordGeneratorApp', ['deadboltPasswordGeneratorApp.services', 'deadboltPasswordGeneratorApp.directives', 'deadboltPasswordGeneratorApp.controllers']);
+angular.module('deadboltPasswordGeneratorApp', ['deadboltPasswordGeneratorApp.services', 'deadboltPasswordGeneratorApp.directives', 'deadboltPasswordGeneratorApp.controllers', 'deadboltPasswordGeneratorApp.filters']);

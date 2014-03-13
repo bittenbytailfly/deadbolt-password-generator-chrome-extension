@@ -71,21 +71,21 @@
                     <div id="passwordReveal" ng-show="showingPassword">
                         <div id="fullPassword" db-highlight>{{ password }}</div>
                         <div id="passChars">
-                            <dl><dt>1</dt><dd>{{ getPasswordCharacter(1) }}</dd></dl>
-                            <dl><dt>2</dt><dd>{{ getPasswordCharacter(2) }}</dd></dl>
-                            <dl><dt>3</dt><dd>{{ getPasswordCharacter(3) }}</dd></dl>
-                            <dl><dt>4</dt><dd>{{ getPasswordCharacter(4) }}</dd></dl>
-                            <dl><dt>5</dt><dd>{{ getPasswordCharacter(5) }}</dd></dl>
-                            <dl ng-show="selectedProfile.passwordLength > 5"><dt>6</dt><dd>{{ getPasswordCharacter(6) }}</dd></dl>
-                            <dl ng-show="selectedProfile.passwordLength > 6"><dt>7</dt><dd>{{ getPasswordCharacter(7) }}</dd></dl>
-                            <dl ng-show="selectedProfile.passwordLength > 7"><dt>8</dt><dd>{{ getPasswordCharacter(8) }}</dd></dl>
-                            <dl ng-show="selectedProfile.passwordLength > 8"><dt>9</dt><dd>{{ getPasswordCharacter(9) }}</dd></dl>
-                            <dl ng-show="selectedProfile.passwordLength > 9"><dt>10</dt><dd>{{ getPasswordCharacter(10) }}</dd></dl>
-                            <dl ng-show="selectedProfile.passwordLength > 10"><dt>11</dt><dd>{{ getPasswordCharacter(11) }}</dd></dl>
-                            <dl ng-show="selectedProfile.passwordLength > 11"><dt>12</dt><dd>{{ getPasswordCharacter(12) }}</dd></dl>
-                            <dl ng-show="selectedProfile.passwordLength > 12"><dt>13</dt><dd>{{ getPasswordCharacter(13) }}</dd></dl>
-                            <dl ng-show="selectedProfile.passwordLength > 13"><dt>14</dt><dd>{{ getPasswordCharacter(14) }}</dd></dl>
-                            <dl ng-show="selectedProfile.passwordLength > 14"><dt>15</dt><dd>{{ getPasswordCharacter(15) }}</dd></dl>
+                            <dl><dt>1</dt><dd>{{ password|passChar:1 }}</dd></dl>
+                            <dl><dt>2</dt><dd>{{ password|passChar:2 }}</dd></dl>
+                            <dl><dt>3</dt><dd>{{ password|passChar:3 }}</dd></dl>
+                            <dl><dt>4</dt><dd>{{ password|passChar:4 }}</dd></dl>
+                            <dl><dt>5</dt><dd>{{ password|passChar:5 }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 5"><dt>6</dt><dd>{{ password|passChar:6 }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 6"><dt>7</dt><dd>{{ password|passChar:7 }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 7"><dt>8</dt><dd>{{ password|passChar:8 }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 8"><dt>9</dt><dd>{{ password|passChar:9 }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 9"><dt>10</dt><dd>{{ password|passChar:10 }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 10"><dt>11</dt><dd>{{ password|passChar:11 }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 11"><dt>12</dt><dd>{{ password|passChar:12 }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 12"><dt>13</dt><dd>{{ password|passChar:13 }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 13"><dt>14</dt><dd>{{ password|passChar:14 }}</dd></dl>
+                            <dl ng-show="selectedProfile.passwordLength > 14"><dt>15</dt><dd>{{ password|passChar:15 }}</dd></dl>
                         </div>
                     </div>
                     <div id="passwordCopied" ng-show="copiedToClipboard">
@@ -105,6 +105,7 @@
     <script src="js/tracking.js"></script>
     <script src="js/app.js"></script>
     <script src="js/services.js"></script>
+    <script src="js/filters.js"></script>
     <script src="js/controllers.js"></script>
     <script src="js/directives.js"></script>
 

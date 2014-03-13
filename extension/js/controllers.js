@@ -1,4 +1,4 @@
-﻿/*    
+/*    
     Copyright 2012, 2014 Ed Carter
 
     This file is part of Deadbolt Password Generator.
@@ -58,13 +58,6 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
 
         $scope.passwordGenerated = function () {
             return $scope.password.length > 0;
-        };
-
-        $scope.getPasswordCharacter = function (i) {
-            if ($scope.password.length < i) {
-                return '';
-            }
-            return $scope.password.substr(i - 1, 1);
         };
 
         // Click Handlers
