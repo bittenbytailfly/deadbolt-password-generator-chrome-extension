@@ -1,4 +1,4 @@
-﻿/*    
+/*    
     Copyright 2012, 2014 Ed Carter
 
     This file is part of Deadbolt Password Generator.
@@ -27,3 +27,15 @@ function injectPasswords(password) {
         }
     }
 };
+
+chrome.extension.onMessage.addListener(function (request, sender, callback) {
+    var cmd = request.command;
+    switch (cmd) {
+        case 'inject':
+            
+            break;
+        case 'ping':
+            callback(true);
+            break;
+    }
+});

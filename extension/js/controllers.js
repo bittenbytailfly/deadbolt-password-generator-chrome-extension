@@ -1,4 +1,4 @@
-﻿/*    
+/*    
     Copyright 2012, 2014 Ed Carter
 
     This file is part of Deadbolt Password Generator.
@@ -95,27 +95,30 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
 
         $scope.copyPasswordToClipboard = function () {
             $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
-            $scope.copiedToClipboard = true;
             var message = {
                 command: 'copyPasswordToClipboard',
-                context: { password: $scope.password }
+                password: $scope.password
             };
-            chrome.extension.getBackgroundPage().postMessage(message, '*');
-            analyticsService.postEvent('Copied', $scope.selectedProfile);
+            chrome.runtime.sendMessage(message, function () {
+                $scope.$apply(function() {
+                    $scope.copiedToClipboard = true;
+                    analyticsService.postEvent('Copied', $scope.selectedProfile);
+                });
+            });
         };
 
         $scope.injectPassword = function () {
-            console.log('attempting inject');
             $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
-            $scope.copiedToClipboard = true;
             var message = {
                 command: 'injectPassword',
-                context: { password: $scope.password }
+                password: $scope.password
             };
-            chrome.runtime.sendMessage(message, function (response) {
-                console.log(response.farewell);
+            chrome.runtime.sendMessage(message, function () {
+                $scope.$apply(function () {
+                    // Something UI related here.
+                    analyticsService.postEvent('Injected', $scope.selectedProfile);
+                });
             });
-            analyticsService.postEvent('Injected', $scope.selectedProfile);
         };
 
         $scope.toggleShowPhrase = function () {
