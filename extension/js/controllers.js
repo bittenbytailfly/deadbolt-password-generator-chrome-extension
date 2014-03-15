@@ -97,7 +97,7 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
             $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
             var message = {
                 command: 'copyPasswordToClipboard',
-                password: $scope.password
+                data: { password: $scope.password }
             };
             chrome.runtime.sendMessage(message, function () {
                 $scope.$apply(function() {
@@ -111,7 +111,7 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
             $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
             var message = {
                 command: 'injectPassword',
-                password: $scope.password
+                data: { password: $scope.password }
             };
             chrome.runtime.sendMessage(message, function () {
                 $scope.$apply(function () {

@@ -21,7 +21,7 @@
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
       var cmd = request.command;
-      var password = request.password;
+      var password = request.data.password;
       switch (cmd) {
           case 'copyPasswordToClipboard':
               setClipboardValue(password);
@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener(
               break;
           case 'injectPassword':
               chrome.tabs.query({ active: true }, function (tabs) {
-                  chrome.tabs.sendMessage(tabs[0].id, { command: 'inject', password: password }, function(r) {
+                  chrome.tabs.sendMessage(tabs[0].id, { command: 'inject', data: { password: password }}, function(r) {
                        console.log(r);
                   });
               });

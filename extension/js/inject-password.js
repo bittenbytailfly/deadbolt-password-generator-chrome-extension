@@ -1,4 +1,4 @@
-/*    
+﻿/*    
     Copyright 2012, 2014 Ed Carter
 
     This file is part of Deadbolt Password Generator.
@@ -19,11 +19,18 @@
  */
 
 function injectPasswords(password) {
-    console.log('test');
     var inputs = document.getElementsByTagName("input");
     for (var i = 0; i < inputs.length; i++) {
         if (inputs[i].type.toLowerCase() === "password") {
-            console.log('found one');
+            var pwBox = inputs[i];
+            pwBox.value = password;
+            pwBox.style.backgroundImage = "url('" + chrome.extension.getURL('img/injected-bg-icon.png') + "')";
+            pwBox.style.backgroundSize = 'contain';
+            pwBox.style.backgroundRepeat = 'no-repeat';
+            pwBox.style.backgroundPositionX = 'right';
+            var event = document.createEvent("UIEvents");
+            event.initUIEvent("change", true, true);
+            pwBox.dispatchEvent(event);
         }
     }
 };
@@ -32,9 +39,12 @@ chrome.extension.onMessage.addListener(function (request, sender, callback) {
     var cmd = request.command;
     switch (cmd) {
         case 'inject':
-            
+            var data = request.data;
+            injectPasswords(data.password);
+            callback();
             break;
-        case 'ping':
+        case 'checkPasswordInputAvailable':
+
             callback(true);
             break;
     }

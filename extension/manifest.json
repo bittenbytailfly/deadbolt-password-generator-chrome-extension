@@ -16,6 +16,7 @@
 		"js": ["js/inject-password.js"]
 	}
   ],
+  "web_accessible_resources": ["img/injected-bg-icon.png"],
   "permissions": [
     "storage",
 	"clipboardWrite",
