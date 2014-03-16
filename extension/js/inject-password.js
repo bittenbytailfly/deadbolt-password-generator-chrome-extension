@@ -35,7 +35,18 @@ function injectPasswords(password) {
     }
 };
 
+function checkPasswordFieldsExist() {
+    var inputs = document.getElementsByTagName("input");
+    for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].type.toLowerCase() === "password") {
+            return true;
+        }
+    }
+    return false;
+}
+
 chrome.extension.onMessage.addListener(function (request, sender, callback) {
+    console.log(request);
     var cmd = request.command;
     switch (cmd) {
         case 'inject':
@@ -44,8 +55,7 @@ chrome.extension.onMessage.addListener(function (request, sender, callback) {
             callback();
             break;
         case 'checkPasswordInputAvailable':
-
-            callback(true);
+            callback({ available: checkPasswordFieldsExist() });
             break;
     }
 });

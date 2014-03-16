@@ -37,6 +37,14 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
             });
         });
 
+        chrome.tabs.query({ active: true }, function (tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, { command: 'checkPasswordInputAvailable' }, function (r) {
+                $scope.$apply(function () {
+                    $scope.injectible = r.available;
+                });
+            });
+        });
+
         $scope.$watch('selectedProfile', function () {
             $scope.memorablePhraseFocused = true;
         });
@@ -108,6 +116,7 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
         };
 
         $scope.injectPassword = function () {
+
             $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
             var message = {
                 command: 'injectPassword',
