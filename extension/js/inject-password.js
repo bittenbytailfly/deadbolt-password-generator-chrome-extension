@@ -46,7 +46,6 @@ function checkPasswordFieldsExist() {
 }
 
 chrome.extension.onMessage.addListener(function (request, sender, callback) {
-    console.log(request);
     var cmd = request.command;
     switch (cmd) {
         case 'inject':

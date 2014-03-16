@@ -63,13 +63,13 @@
                             <div class="controls" ng-show="buttonsEnabled()">
                                 <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="revealPassword()">Reveal</button>
                                 <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="copyPasswordToClipboard()">Copy</button>
-                                <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="injectPassword()">Inject</button>
+                                <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="injectPassword()" ng-show="injectable">Inject</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="back">
-                    <div id="passwordReveal" ng-show="showingPassword">
+                    <div id="passwordReveal" ng-show="revealMode == 'revealed'">
                         <div id="fullPassword" db-highlight>{{ password }}</div>
                         <div id="passChars">
                             <dl><dt>1</dt><dd>{{ getPasswordCharacter(1) }}</dd></dl>
@@ -89,9 +89,14 @@
                             <dl ng-show="selectedProfile.passwordLength > 14"><dt>15</dt><dd>{{ getPasswordCharacter(15) }}</dd></dl>
                         </div>
                     </div>
-                    <div id="passwordCopied" ng-show="copiedToClipboard">
+                    <div id="passwordCopied" ng-show="revealMode == 'copied'">
                         <p>
                             Password copied to clipboard for ten seconds
+                        </p>
+                    </div>
+                    <div id="passwordInjected" ng-show="revealMode == 'injected'">
+                        <p>
+                            Password autofilled successfully
                         </p>
                     </div>
                 </div>

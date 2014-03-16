@@ -144,7 +144,7 @@ h1
     background: #111;
 }
 
-#passwordCopied p
+#passwordCopied, #passwordInjected p
 {
     padding-top: 50px;
     text-align: center;
