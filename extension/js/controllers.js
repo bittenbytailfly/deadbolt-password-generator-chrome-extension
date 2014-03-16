@@ -22,6 +22,8 @@
 
 angular.module('deadboltPasswordGeneratorApp.controllers', [])
     .controller('popupCtrl', function ($scope, settingsRepository, deadboltSettingsFactory, analyticsService) {
+        $scope.placeHolders = ['rainforest book shop', 'black horse banking', 'dark blue social', 'bird song status update', 'grocery shopping'];
+        $scope.placeHolderValue = 'e.g. ' + $scope.placeHolders[Math.floor((Math.random() * $scope.placeHolders.length))];
         $scope.minimumPhraseLength = 6;
         $scope.memorablePhrase = '';
         $scope.showPassword = false;
@@ -62,10 +64,6 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
 
         $scope.buttonsEnabled = function () {
             return $scope.memorablePhrase.length >= $scope.minimumPhraseLength;
-        };
-
-        $scope.passwordGenerated = function () {
-            return $scope.password.length > 0;
         };
 
         $scope.getPasswordCharacter = function (i) {

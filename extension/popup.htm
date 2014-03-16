@@ -35,7 +35,7 @@
         </div>
 
         <div id="entryForm">
-            <div class="click panel circle" ng-class="{flip: passwordGenerated()}">
+            <div class="click panel circle" ng-class="{flip: revealMode != 'none'}">
                 <div class="front">
                     <div class="form-horizontal">
                         <div class="control-group">
@@ -51,7 +51,7 @@
                             <label class="control-label" for="txtPassphrase">Phrase</label>
                             <div class="controls">
                                 <div class="input-append">
-                                    <input id="txtPassphrase" class="span3" ng-attr-type="{{inputPhraseType()}}" ng-model="memorablePhrase" db-focus="memorablePhraseFocused" />
+                                    <input id="txtPassphrase" ng-attr-placeholder="{{placeHolderValue}}" class="span3" ng-attr-type="{{inputPhraseType()}}" ng-model="memorablePhrase" db-focus="memorablePhraseFocused" />
                                     <button class="btn" ng-click="toggleShowPhrase()" title="Show/Hide"><i ng-class="{ 'icon-eye-open': !showPassword, 'icon-eye-close': showPassword }"></i></button>
                                 </div>
                             </div>
