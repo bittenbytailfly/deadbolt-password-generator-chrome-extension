@@ -18,23 +18,18 @@
     <http://www.gnu.org/licenses/>.
  */
 
-window.addEventListener('message', function (event) {
-    var command = event.data.command;
-    switch (command) {
-        case 'copyPasswordToClipboard':
-            setClipboardValue(event.data.context.password);
-            startCountdown();
-            break;
-        case 'initialize':
-            chrome.browserAction.setBadgeBackgroundColor({ color: '#00f' });
-            chrome.browserAction.setBadgeText({ text: '' });
-            break;
-        case 'clearClipboard':
-            setClipboardValue(' ');
-            chrome.browserAction.setBadgeText({ text: '' });
-            break;
-    }
-}, false);
+chrome.runtime.onMessage.addListener(
+  function (request, sender, sendResponse) {
+      var cmd = request.command;
+      switch (cmd) {
+          case 'copyPasswordToClipboard':
+              var password = request.data.password;
+              setClipboardValue(password);
+              decreaseCounter(10);
+              sendResponse();
+              break;
+      }
+  });
 
 function setClipboardValue(text) {
     var txt = document.createElement('textarea');
@@ -45,24 +40,16 @@ function setClipboardValue(text) {
     document.body.removeChild(txt);
 }
 
-var countdownTimer = 0;
-
-function startCountdown() {
-    countdownTimer = 10;
-    decreaseCounter();
-}
-
-function decreaseCounter() {
-    var displayNumber = '0' + countdownTimer;
+function decreaseCounter(counter) {
+    var displayNumber = '0' + counter;
     displayNumber = displayNumber.substr(displayNumber.length - 2);
     chrome.browserAction.setBadgeText({ text: '' + displayNumber });
-    countdownTimer--;
-    if (countdownTimer >= 0) {
-        setTimeout(decreaseCounter, 1000);
+    counter--;
+    if (counter >= 0) {
+        setTimeout(function() { decreaseCounter(counter); }, 1000);
     }
     else {
-        window.postMessage({
-            command: 'clearClipboard'
-        }, '*');
+        setClipboardValue(' ');
+        chrome.browserAction.setBadgeText({ text: '' });
     }
 }

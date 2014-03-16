@@ -22,18 +22,28 @@
 
 angular.module('deadboltPasswordGeneratorApp.controllers', [])
     .controller('popupCtrl', function ($scope, settingsRepository, deadboltSettingsFactory, analyticsService) {
+        $scope.placeHolders = ['rainforest book shop', 'black horse banking', 'dark blue social', 'bird song status update', 'grocery shopping'];
+        $scope.placeHolderValue = 'e.g. ' + $scope.placeHolders[Math.floor((Math.random() * $scope.placeHolders.length))];
         $scope.minimumPhraseLength = 6;
         $scope.memorablePhrase = '';
         $scope.showPassword = false;
-        $scope.copiedToClipboard = false;
         $scope.password = '';
-        $scope.showingPassword = false;
         $scope.memorablePhraseFocused = true;
+        $scope.injectable = false;
+        $scope.revealMode = 'none';
 
         settingsRepository.getSettings(function (deadboltSettings) {
             $scope.$apply(function () {
                 $scope.profiles = deadboltSettings.simpleProfileList;
                 $scope.selectedProfile = deadboltSettingsFactory.findMatchingProfileByName($scope.profiles, deadboltSettings.defaultProfileName);
+            });
+        });
+
+        chrome.tabs.query({ active: true }, function (tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, { command: 'checkPasswordInputAvailable' }, function (r) {
+                $scope.$apply(function () {
+                    $scope.injectable = r.available;
+                });
             });
         });
 
@@ -54,10 +64,6 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
 
         $scope.buttonsEnabled = function () {
             return $scope.memorablePhrase.length >= $scope.minimumPhraseLength;
-        };
-
-        $scope.passwordGenerated = function () {
-            return $scope.password.length > 0;
         };
 
         // Click Handlers
@@ -81,20 +87,45 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
         };
 
         $scope.revealPassword = function () {
-            $scope.showingPassword = true;
+            $scope.revealMode = 'revealed';
             $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
             analyticsService.postEvent('Revealed', $scope.selectedProfile);
         };
 
         $scope.copyPasswordToClipboard = function () {
             $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
-            $scope.copiedToClipboard = true;
             var message = {
                 command: 'copyPasswordToClipboard',
-                context: { password: $scope.password }
+                data: { password: $scope.password }
             };
-            chrome.extension.getBackgroundPage().postMessage(message, '*');
-            analyticsService.postEvent('Copied', $scope.selectedProfile);
+            chrome.runtime.sendMessage(message, function () {
+                $scope.$apply(function() {
+                    $scope.revealMode = 'copied';
+                    analyticsService.postEvent('Copied', $scope.selectedProfile);
+                });
+            });
+        };
+
+        $scope.injectPassword = function () {
+            $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
+            chrome.tabs.query({ active: true }, function (tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, { command: 'inject', data: { password: $scope.password } }, function () {
+                    $scope.$apply(function () {
+                        $scope.revealMode = 'injected';
+                    });
+                });
+            });
+
+            var message = {
+                command: 'injectPassword',
+                data: { password: $scope.password }
+            };
+            chrome.runtime.sendMessage(message, function () {
+                $scope.$apply(function () {
+                    // Something UI related here.
+                    analyticsService.postEvent('Injected', $scope.selectedProfile);
+                });
+            });
         };
 
         $scope.toggleShowPhrase = function () {

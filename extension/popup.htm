@@ -35,7 +35,7 @@
         </div>
 
         <div id="entryForm">
-            <div class="click panel circle" ng-class="{flip: passwordGenerated()}">
+            <div class="click panel circle" ng-class="{flip: revealMode != 'none'}">
                 <div class="front">
                     <div class="form-horizontal">
                         <div class="control-group">
@@ -51,7 +51,7 @@
                             <label class="control-label" for="txtPassphrase">Phrase</label>
                             <div class="controls">
                                 <div class="input-append">
-                                    <input id="txtPassphrase" class="span3" ng-attr-type="{{inputPhraseType()}}" ng-model="memorablePhrase" db-focus="memorablePhraseFocused" />
+                                    <input id="txtPassphrase" ng-attr-placeholder="{{placeHolderValue}}" class="span3" ng-attr-type="{{inputPhraseType()}}" ng-model="memorablePhrase" db-focus="memorablePhraseFocused" />
                                     <button class="btn" ng-click="toggleShowPhrase()" title="Show/Hide"><i ng-class="{ 'icon-eye-open': !showPassword, 'icon-eye-close': showPassword }"></i></button>
                                 </div>
                             </div>
@@ -63,12 +63,13 @@
                             <div class="controls" ng-show="buttonsEnabled()">
                                 <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="revealPassword()">Reveal</button>
                                 <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="copyPasswordToClipboard()">Copy</button>
+                                <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="injectPassword()" ng-show="injectable">Inject</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="back">
-                    <div id="passwordReveal" ng-show="showingPassword">
+                    <div id="passwordReveal" ng-show="revealMode == 'revealed'">
                         <div id="fullPassword" db-highlight>{{ password }}</div>
                         <div id="passChars">
                             <dl><dt>1</dt><dd>{{ password|passChar:1 }}</dd></dl>
@@ -88,9 +89,14 @@
                             <dl ng-show="selectedProfile.passwordLength > 14"><dt>15</dt><dd>{{ password|passChar:15 }}</dd></dl>
                         </div>
                     </div>
-                    <div id="passwordCopied" ng-show="copiedToClipboard">
+                    <div id="passwordCopied" ng-show="revealMode == 'copied'">
                         <p>
                             Password copied to clipboard for ten seconds
+                        </p>
+                    </div>
+                    <div id="passwordInjected" ng-show="revealMode == 'injected'">
+                        <p>
+                            Password autofilled successfully
                         </p>
                     </div>
                 </div>
