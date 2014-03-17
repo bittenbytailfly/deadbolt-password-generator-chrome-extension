@@ -41,9 +41,11 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
 
         chrome.tabs.query({ active: true }, function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, { command: 'checkPasswordInputAvailable' }, function (r) {
-                $scope.$apply(function () {
-                    $scope.injectable = r.available;
-                });
+                if (r != null) {
+                    $scope.$apply(function () {
+                        $scope.injectable = r.available;
+                    });
+                }
             });
         });
 
