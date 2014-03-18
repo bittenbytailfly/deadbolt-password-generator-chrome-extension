@@ -1,6 +1,6 @@
 {
   "name": "Deadbolt Password Generator",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Turn memorable phrases into strong passwords.",
   "icons": { 
     "16": "img/icon16.png",
@@ -19,8 +19,7 @@
   "web_accessible_resources": ["img/injected-bg-icon.png"],
   "permissions": [
     "storage",
-	"clipboardWrite",
-	"activeTab"
+	"clipboardWrite"
   ],
   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
   "browser_action": {
