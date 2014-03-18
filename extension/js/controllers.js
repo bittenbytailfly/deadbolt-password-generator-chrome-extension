@@ -39,13 +39,15 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
             });
         });
 
-        chrome.tabs.query({ active: true }, function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, { command: 'checkPasswordInputAvailable' }, function (r) {
-                if (r != null) {
-                    $scope.$apply(function () {
-                        $scope.injectable = r.available;
-                    });
-                }
+        chrome.tabs.query({ active: true, lastFocusedWindow: true }, function (tabs) {
+            chrome.tabs.executeScript(tabs[0].id, { file: "js/inject-password.js" }, function () {
+                chrome.tabs.sendMessage(tabs[0].id, { command: 'checkPasswordInputAvailable' }, function (r) {
+                    if (r != null) {
+                        $scope.$apply(function () {
+                            $scope.injectable = r.available;
+                        });
+                    }
+                });
             });
         });
 
@@ -110,7 +112,7 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
 
         $scope.injectPassword = function () {
             $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
-            chrome.tabs.query({ active: true }, function (tabs) {
+            chrome.tabs.query({ active: true, lastFocusedWindow: true }, function (tabs) {
                 chrome.tabs.sendMessage(tabs[0].id, { command: 'inject', data: { password: $scope.password } }, function () {
                     $scope.$apply(function () {
                         $scope.revealMode = 'injected';
