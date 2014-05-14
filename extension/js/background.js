@@ -24,8 +24,12 @@ chrome.runtime.onMessage.addListener(
       switch (cmd) {
           case 'copyPasswordToClipboard':
               var password = request.data.password;
+              var timerEnabled = request.data.timerEnabled;
+              var secondsToCopy = request.data.secondsToCopy;
               setClipboardValue(password);
-              decreaseCounter(10);
+              if (timerEnabled) {
+                  decreaseCounter(secondsToCopy);
+              }
               sendResponse();
               break;
       }

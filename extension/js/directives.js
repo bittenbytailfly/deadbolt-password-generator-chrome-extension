@@ -63,6 +63,20 @@ angular.module('deadboltPasswordGeneratorApp.directives', [])
             }
         };
     }])
+    .directive('dbEnter', [function () {
+        return {
+            link: function (scope, elem, attrs) {
+                elem.bind("keydown keypress", function (event) {
+                    if(event.which === 13) {
+                        scope.$apply(function (){
+                            scope.$eval(attrs.dbEnter);
+                        });
+                        event.preventDefault();
+                    }
+                });
+            }
+        };
+    }])
     .directive('toggleButton', [function () {
         return {
             restrict: 'E',

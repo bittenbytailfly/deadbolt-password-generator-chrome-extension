@@ -59,7 +59,7 @@
                             <label class="control-label" for="txtPassphrase">Phrase</label>
                             <div class="controls">
                                 <div class="input-append">
-                                    <input id="txtPassphrase" ng-attr-placeholder="{{placeHolderValue}}" class="span3" ng-attr-type="{{inputPhraseType()}}" ng-model="memorablePhrase" db-focus="memorablePhraseFocused" />
+                                    <input id="txtPassphrase" db-enter="enterKeyPressed()" ng-attr-placeholder="{{placeHolderValue}}" class="span3" ng-attr-type="{{inputPhraseType()}}" ng-model="memorablePhrase" db-focus="memorablePhraseFocused" />
                                     <button class="btn" ng-click="toggleShowPhrase()" title="Show/Hide"><i ng-class="{ 'icon-eye-open': !showPassword, 'icon-eye-close': showPassword }"></i></button>
                                 </div>
                             </div>
@@ -69,9 +69,9 @@
                                 <small class="muted">{{ remainingCharacterText() }}</small>
                             </div>
                             <div class="controls" ng-show="buttonsEnabled()">
-                                <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="revealPassword()">Reveal</button>
-                                <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="copyPasswordToClipboard()">Copy</button>
-                                <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="injectPassword()" ng-show="injectable">Autofill</button>
+                                <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="revealPassword()" ng-class="{ 'btn-success': enterKeySettings.enabled && (enterKeySettings.behaviour == 'R' || (!injectable && enterKeySettings.behaviour == 'AR')) }">Reveal</button>
+                                <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="copyPasswordToClipboard()" ng-class="{ 'btn-success': enterKeySettings.enabled && (enterKeySettings.behaviour == 'C' || (!injectable && enterKeySettings.behaviour == 'AC')) }">Copy</button>
+                                <button class="btn btn-mini btn-primary btn-flat" type="button" ng-click="injectPassword()" ng-show="injectable" ng-class="{ 'btn-success': enterKeySettings.enabled && (enterKeySettings.behaviour == 'A' || enterKeySettings.behaviour == 'AC'|| enterKeySettings.behaviour == 'AR') }">Autofill</button>
                             </div>
                         </div>
                     </div>
@@ -99,7 +99,7 @@
                     </div>
                     <div id="passwordCopied" ng-show="revealMode == 'copied'">
                         <p>
-                            Password copied to clipboard for ten seconds
+                            Password copied to clipboard<span ng-show="clipboardSettings.enabled"> for {{ clipboardSettings.seconds }} seconds</span>
                         </p>
                     </div>
                     <div id="passwordInjected" ng-show="revealMode == 'injected'">

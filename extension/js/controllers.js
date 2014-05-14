@@ -36,6 +36,8 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
             $scope.$apply(function () {
                 $scope.profiles = deadboltSettings.simpleProfileList;
                 $scope.selectedProfile = deadboltSettingsFactory.findMatchingProfileByName($scope.profiles, deadboltSettings.defaultProfileName);
+                $scope.clipboardSettings = deadboltSettings.clipboardSettings;
+                $scope.enterKeySettings = deadboltSettings.enterKeySettings;
             });
         });
 
@@ -90,6 +92,35 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
             return $scope.showPassword ? 'text' : 'password';
         };
 
+        $scope.enterKeyPressed = function () {
+            if ($scope.enterKeySettings.enabled && $scope.buttonsEnabled()) {
+                switch ($scope.enterKeySettings.behaviour) {
+                    case 'R':
+                        $scope.revealPassword();
+                        break;
+                    case 'C':
+                        $scope.copyPasswordToClipboard();
+                        break;
+                    case 'AR':
+                        if ($scope.injectable) {
+                            $scope.injectPassword();
+                        }
+                        else {
+                            $scope.revealPassword();
+                        }
+                        break;
+                    case 'AC':
+                        if ($scope.injectable) {
+                            $scope.injectPassword();
+                        }
+                        else {
+                            $scope.copyPasswordToClipboard();
+                        }
+                        break;
+                }
+            }
+        };
+
         $scope.revealPassword = function () {
             $scope.revealMode = 'revealed';
             $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
@@ -100,7 +131,11 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
             $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
             var message = {
                 command: 'copyPasswordToClipboard',
-                data: { password: $scope.password }
+                data: {
+                    password: $scope.password,
+                    timerEnabled: $scope.clipboardSettings.enabled,
+                    secondsToCopy: $scope.clipboardSettings.seconds
+                }
             };
             chrome.runtime.sendMessage(message, function () {
                 $scope.$apply(function() {
@@ -135,6 +170,8 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
             $scope.$apply(function () {
                 $scope.profiles = deadboltSettings.simpleProfileList;
                 $scope.defaultProfileName = deadboltSettings.defaultProfileName;
+                $scope.clipboardSettings = deadboltSettings.clipboardSettings;
+                $scope.enterKeySettings = deadboltSettings.enterKeySettings;
             });
             $scope.$apply(function () {
                 $scope.changesMade = false;
@@ -149,8 +186,17 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
             $scope.changesMade = true;
         }, true);
 
-        $scope.createProfile = function () {
-            var p = new deadboltSettingsFactory.simpleProfile('Profile ' + ($scope.profiles.length + 1), false, false, false, '0', '0', '0', '0', 15);
+        $scope.$watch('clipboardSettings', function () {
+            $scope.changesMade = true;
+        }, true);
+
+         $scope.$watch('enterKeySettings', function () {
+            $scope.changesMade = true;
+        }, true);
+        
+         $scope.createProfile = function () {
+             console.log($scope.profiles);
+            var p = deadboltSettingsFactory.createDefaultProfile('Profile ' + ($scope.profiles.length + 1));
             $scope.profiles.push(p);
             $scope.activeTab = $scope.profiles.length - 1;
         };
@@ -183,7 +229,7 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
         };
 
         $scope.save = function () {
-            var deadboltSettings = new deadboltSettingsFactory.deadboltSettings($scope.defaultProfileName, $scope.profiles);
+            var deadboltSettings = new deadboltSettingsFactory.deadboltSettings($scope.defaultProfileName, $scope.profiles, $scope.clipboardSettings, $scope.enterKeySettings);
             settingsRepository.saveSettings(deadboltSettings, $scope.saveComplete);
         };
 
