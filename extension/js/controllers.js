@@ -116,18 +116,8 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
                 chrome.tabs.sendMessage(tabs[0].id, { command: 'inject', data: { password: $scope.password } }, function () {
                     $scope.$apply(function () {
                         $scope.revealMode = 'injected';
+                        analyticsService.postEvent('Injected', $scope.selectedProfile);
                     });
-                });
-            });
-
-            var message = {
-                command: 'injectPassword',
-                data: { password: $scope.password }
-            };
-            chrome.runtime.sendMessage(message, function () {
-                $scope.$apply(function () {
-                    // Something UI related here.
-                    analyticsService.postEvent('Injected', $scope.selectedProfile);
                 });
             });
         };
