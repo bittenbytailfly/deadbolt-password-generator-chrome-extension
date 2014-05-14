@@ -195,7 +195,6 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
         }, true);
         
          $scope.createProfile = function () {
-             console.log($scope.profiles);
             var p = deadboltSettingsFactory.createDefaultProfile('Profile ' + ($scope.profiles.length + 1));
             $scope.profiles.push(p);
             $scope.activeTab = $scope.profiles.length - 1;

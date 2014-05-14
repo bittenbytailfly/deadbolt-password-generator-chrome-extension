@@ -99,7 +99,6 @@ angular.module('deadboltPasswordGeneratorApp.services', [])
                 this.behaviour = behaviour;
             },
 	        simpleProfile: function (name, includeSymbols, caseSensitive, usePinNumber, pin1, pin2, pin3, pin4, passwordLength) {
-	            console.log(this);
                 this.name = name;
                 this.includeSymbols = includeSymbols;
                 this.caseSensitive = caseSensitive;
@@ -109,7 +108,6 @@ angular.module('deadboltPasswordGeneratorApp.services', [])
                 this.pin3 = pin3;
                 this.pin4 = pin4;
                 this.passwordLength = passwordLength;
-                console.log(this);
             },
             createDefaultProfile: function (name) {
                 return new this.simpleProfile(name, true, true, false, '0', '0', '0', '0', 15);
