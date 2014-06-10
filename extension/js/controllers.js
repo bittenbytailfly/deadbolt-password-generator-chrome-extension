@@ -169,7 +169,7 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
         settingsRepository.getSettings(function (deadboltSettings) {
             $scope.$apply(function () {
                 $scope.profiles = deadboltSettings.simpleProfileList;
-                $scope.defaultProfileName = deadboltSettings.defaultProfileName;
+                $scope.defaultProfile = deadboltSettingsFactory.findMatchingProfileByName($scope.profiles, deadboltSettings.defaultProfileName);
                 $scope.clipboardSettings = deadboltSettings.clipboardSettings;
                 $scope.enterKeySettings = deadboltSettings.enterKeySettings;
             });
@@ -182,7 +182,7 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
             $scope.changesMade = true;
         }, true);
 
-        $scope.$watch('defaultProfileName', function () {
+        $scope.$watch('defaultProfile', function () {
             $scope.changesMade = true;
         }, true);
 
@@ -207,8 +207,10 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
         };
 
         $scope.removeProfile = function (i) {
-            var deletedProfileName = $scope.profiles[i].name;
-            $scope.profiles.splice(i, 1);
+            var deletedProfile = $scope.profiles.splice(i, 1)[0];
+            if (deletedProfile == $scope.defaultProfile) {
+                $scope.defaultProfile = $scope.profiles[0];
+            }
             var profileCount = $scope.profiles.length;
             if (i < $scope.activeTab) {
                 $scope.activeTab--;
@@ -221,14 +223,10 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
                     $scope.activeTab = i;
                 }
             }
-            if (deletedProfileName == $scope.defaultProfileName) {
-                // The default profile has been erased.
-                $scope.defaultProfileName = $scope.profiles[0].name;
-            };
         };
 
         $scope.save = function () {
-            var deadboltSettings = new deadboltSettingsFactory.deadboltSettings($scope.defaultProfileName, $scope.profiles, $scope.clipboardSettings, $scope.enterKeySettings);
+            var deadboltSettings = new deadboltSettingsFactory.deadboltSettings($scope.defaultProfile.name, $scope.profiles, $scope.clipboardSettings, $scope.enterKeySettings);
             settingsRepository.saveSettings(deadboltSettings, $scope.saveComplete);
         };
 
