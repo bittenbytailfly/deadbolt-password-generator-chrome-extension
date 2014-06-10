@@ -86,7 +86,8 @@ angular.module('deadboltPasswordGeneratorApp.directives', [])
                         '<button type="button" class="btn" ng-class="{active: no}" ng-click="click(false)">No</button>' +
                       '</div>',
             scope: {
-                ngModel: '='
+                ngModel: '=',
+                ngChange: '='
             },
             link: function (scope, element, attr) {
                 scope.click = function (value) {
@@ -95,6 +96,9 @@ angular.module('deadboltPasswordGeneratorApp.directives', [])
                 scope.$watch('ngModel', function () {
                     scope.yes = scope.ngModel;
                     scope.no = !scope.ngModel;
+                    if (scope.ngChange) {
+                        scope.ngChange();
+                    }
                 });
             }
         };

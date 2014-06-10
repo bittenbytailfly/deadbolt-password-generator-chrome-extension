@@ -87,7 +87,7 @@
                             <div class="control-group">
                                 <label class="control-label" for="inputPassword">Use Pin Number</label>
                                 <div class="controls">
-                                    <toggle-button ng-model="p.usePinNumber"></toggle-button>
+                                    <toggle-button ng-model="p.usePinNumber" ng-change="pinOptionChanged(p)"></toggle-button>
                                 </div>
                             </div>
 
