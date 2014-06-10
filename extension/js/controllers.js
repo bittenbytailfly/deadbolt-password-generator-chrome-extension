@@ -234,4 +234,13 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
             $scope.$apply(function() { $scope.changesMade = false });
         };
 
+        $scope.pinOptionChanged = function (p) {
+            if (!p.usePinNumber) {
+                p.pin1 = '0';
+                p.pin2 = '0';
+                p.pin3 = '0';
+                p.pin4 = '0';
+            }
+        }
+
     });
