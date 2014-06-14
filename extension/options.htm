@@ -209,49 +209,49 @@
                 </div>
             </div>
 
-        <hr />
+            <hr />
 
-        <div>
+            <div>
 
-            <h4>Enter Key<small class="pull-right help-button" ng-click="showEnterKeyHelp = !showEnterKeyHelp"><i class="icon icon-question-sign"></i> help</small></h4>
+                <h4>Enter Key<small class="pull-right help-button" ng-click="showEnterKeyHelp = !showEnterKeyHelp"><i class="icon icon-question-sign"></i> help</small></h4>
 
-            <div class="alert alert-info" ng-show="showEnterKeyHelp">
-                <p>When entering a password, pressing enter can toggle events instead of pressing the relevant button.</p>
-            </div>
-
-            <div class="row">
-                <div class="span6">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" id="enterKeyEnabled" ng-model="enterKeySettings.enabled" /> Enable Enter Key on Password Entry
-                        </label>
-                    </div>
+                <div class="alert alert-info" ng-show="showEnterKeyHelp">
+                    <p>When entering a password, pressing enter can toggle events instead of pressing the relevant button.</p>
                 </div>
-                <div class="span6">
-                    <div class="control-group">
-                        <label class="control-label" for="enterKeyBehaviour">Enter key toggles action:</label>
-                        <div class="controls">
-                            <select id="enterKeyBehaviour" ng-model="enterKeySettings.behaviour" ng-disabled="!enterKeySettings.enabled">
-                                <option value="R">Reveal</option>
-                                <option value="C">Copy</option>
-                                <option value="AR">Autofill/Reveal</option>
-                                <option value="AC">Autofill/Copy</option>
-                            </select>
+
+                <div class="row">
+                    <div class="span6">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="enterKeyEnabled" ng-model="enterKeySettings.enabled" /> Enable Enter Key on Password Entry
+                            </label>
+                        </div>
+                    </div>
+                    <div class="span6">
+                        <div class="control-group">
+                            <label class="control-label" for="enterKeyBehaviour">Enter key toggles action:</label>
+                            <div class="controls">
+                                <select id="enterKeyBehaviour" ng-model="enterKeySettings.behaviour" ng-disabled="!enterKeySettings.enabled">
+                                    <option value="R">Reveal</option>
+                                    <option value="C">Copy</option>
+                                    <option value="AR">Autofill/Reveal</option>
+                                    <option value="AC">Autofill/Copy</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
 
         </div>
 
-    </div>
-
-    <div class="toggle-save" ng-show="changesMade">
-        <div class="container">
+        <div class="toggle-save" ng-show="changesMade">
+            <div class="container">
                 <button type="button" class="btn btn-success" ng-click="save()">Save</button>
                 Your changes have not yet been saved
+            </div>
         </div>
     </div>
-
 </body>
 </html>
