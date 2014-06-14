@@ -241,6 +241,34 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
                 p.pin3 = '0';
                 p.pin4 = '0';
             }
-        }
+        };
 
-    });
+    })
+
+    .controller('importExportCtrl', function ($scope, settingsRepository, deadboltSettingsFactory) {
+        
+        settingsRepository.getSettings(function (deadboltSettings) {
+            $scope.$apply(function () {
+                $scope.savedSettings = deadboltSettings;
+            });
+        });
+
+        $scope.exportSettings = function () {
+            console.log('exporting');
+            $scope.deadboltSettings = window.btoa(angular.toJson($scope.savedSettings));
+        };
+
+        $scope.exportSettings = function () {
+            console.log('importing');
+            $scope.savedSettings = window.atob(angular.toJson($scope.deadboltSettings));
+        };
+
+        $scope.exportErrorHandler = function () {
+            console.log('something not right here ...');
+        };
+
+        $scope.exportFinished = function () {
+            console.log('settings exported successfully.');
+        };
+
+     });
