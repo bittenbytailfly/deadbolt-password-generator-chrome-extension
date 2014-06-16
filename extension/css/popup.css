@@ -1,10 +1,8 @@
 #extension-container
 {
-    width: 420px;
-    height: 242px;
+    width: 450px;
     background: #444;
 }
-
 dl
 {
     margin: 0;
@@ -12,14 +10,12 @@ dl
     display: inline-block;
     width: 20px;
 }
-
 dt
 {
     text-align: center;
     font-size: 1em;
     color: #999;
 }
-
 dd
 {
     margin: 0;
@@ -51,9 +47,10 @@ dl:first-child
 
 .panel
 {
-    width: 400px;
+    width: 380px;
     height: 130px;
     margin: auto;
+    padding: 10px;
     -webkit-perspective: 1000;
 }
 .panel .front
@@ -69,17 +66,7 @@ dl:first-child
     z-index: 900;
     -webkit-transform: rotateY(180deg);
 }
-.front, .back
-{
-    padding: 15px 0;
-    background: #fff;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 900;
-    width: inherit;
-    height: inherit;
-}
+
 .panel .back
 {
     z-index: 800;
@@ -122,19 +109,6 @@ h1
     height: 42px;
     background: url('../img/deadbolt-logo.png');
 }
-#logo-container
-{
-    padding: 5px 10px;
-}
-.control-label
-{
-    width: 100px !important;
-}
-.controls
-{
-    margin-left: 120px !important;
-}
-
 #menu
 {
     float: right;
@@ -165,7 +139,63 @@ h1
     cursor: pointer;
 }
 
-.options-label
-{
-    width: 160px !important;
+#entryForm, #passwordPanel {
+    background: #fff;
+    padding: 25px;
+    height: 180px;
+}
+
+.btn {
+    border-radius: 0px;
+}
+
+#passwordButtons {
+    margin: 15px 0;
+}
+
+ .animate-fade
+ {
+    transition:all linear .3s;
+    position: absolute;
+    width: 100%;
+    opacity:1;
+    left: 0;transform:  skew(40deg,40deg);
+ }
+
+  .animate-fade.ng-hide
+ {
+      transition:all linear 0.3s;transform:  skew(40deg,40deg);
+    opacity:0;
+ }
+
+.flipped {
+    -webkit-transform: rotateX(180deg);
+}
+
+#deadboltContainer, #entryForm, #passwordPanel {
+    height: 180px;
+    width: 420px;
+    -webkit-perspective: 1000;
+}
+
+#deadboltCard {
+    -webkit-transition: 0.9s;
+	-webkit-transform-style: preserve-3d;
+	position: relative;
+}
+
+#entryForm, #passwordCard {
+	-webkit-backface-visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#entryForm {
+	z-index: 2;
+}
+
+#passwordPanel {
+	-webkit-transform: rotateX(180deg);
+    -webkit-backface-visibility: hidden;
 }
