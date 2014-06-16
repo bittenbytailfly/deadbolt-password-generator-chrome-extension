@@ -20,4 +20,4 @@
 
 'use strict';
 
-angular.module('deadboltPasswordGeneratorApp', ['deadboltPasswordGeneratorApp.services', 'deadboltPasswordGeneratorApp.directives', 'deadboltPasswordGeneratorApp.controllers', 'deadboltPasswordGeneratorApp.filters']);
+angular.module('deadboltPasswordGeneratorApp', ['deadboltPasswordGeneratorApp.services', 'deadboltPasswordGeneratorApp.directives', 'deadboltPasswordGeneratorApp.controllers', 'deadboltPasswordGeneratorApp.filters', 'ngAnimate']);

@@ -178,6 +178,8 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
             });
         });
 
+        $scope.exporting = false;
+
         $scope.$watch('profiles', function() {
             $scope.changesMade = true;
         }, true);
@@ -241,6 +243,10 @@ angular.module('deadboltPasswordGeneratorApp.controllers', [])
                 p.pin3 = '0';
                 p.pin4 = '0';
             }
+        };
+
+        $scope.exportSettings = function () {
+            document.getElementById('exportDataModal').modal('show');
         };
 
     })

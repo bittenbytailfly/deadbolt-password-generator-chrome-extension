@@ -24,6 +24,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen" />
     <link href="css/options.css" rel="stylesheet" media="screen" />
     <script src="js/angular.min.js"></script>
+    <script src="js/angular-animate.min.js"></script>
     <script src="js/deadbolt.js"></script>
     <script src="js/tracking.js"></script>
     <script src="js/app.js"></script>
@@ -35,142 +36,141 @@
 <body ng-controller="settingsCtrl">
     <div class="titleBar">
         <div class="container">
-            <div class="pull-right" style="margin-top: 15px;">
-                <button class="btn btn-primary">Import/Export Settings</button>
-            </div>
             <h1><span>Deadbolt Password Generator</span></h1>
         </div>
     </div>
     <div class="container">
 
         <div>
-            <h4>Profiles<small class="pull-right help-button" ng-click="showProfileHelp = !showProfileHelp"><i class="icon icon-question-sign"></i> help</small></h4>
+            <h4>Profiles<small class="pull-right help-button" ng-click="showProfileHelp = !showProfileHelp"><span class="glyphicon glyphicon-question-sign"></span> help</small></h4>
             <div class="alert alert-info" ng-show="showProfileHelp">
                 <p>Profiles allow you to configure how the final password will be output, for example by setting length or whether it includes special characters (e.g. '£$^!'). An optional PIN can be set to differentiate your passwords further, although passwords are just as strong without.</p>
             </div>
 
-            <div class="tabbable">
-                <!-- Only required for left/right tabs -->
-                <ul id="profileTabs" class="nav nav-tabs">
-                    <li ng-repeat="p in profiles" ng-class="{active: activeTab == $index}" ng-click="setActiveTab($index)">
-                        <a class="tabTitle">
-                            <span class="close" ng-show="profiles.length != 1" ng-click="removeProfile($index)">&times;</span>
-                            <span>{{ p.name }}</span>&nbsp;
-                        </a>
-                    </li>
-                </ul>
+            <ul id="profileTabs" class="nav nav-tabs">
+                <li ng-repeat="p in profiles" ng-class="{active: activeTab == $index}" ng-click="setActiveTab($index)">
+                    <a class="tabTitle">
+                        <span class="close" ng-show="profiles.length != 1" ng-click="removeProfile($index)">&times;</span>
+                        <span>{{ p.name }}</span>&nbsp;
+                    </a>
+                </li>
+            </ul>
 
-                <div class="tab-content">
+            <div class="tab-content">
 
-                    <div class="tab-pane" ng-repeat="p in profiles" ng-class="{active: activeTab == $index}">
+                <div class="tab-pane" ng-repeat="p in profiles" ng-class="{active: activeTab == $index}">
 
-                        <div class="form-horizontal">
+                    <form class="form-horizontal">
 
-                            <div class="control-group">
-                                <label class="control-label" for="name">Name</label>
-                                <div class="controls">
-                                    <input type="text" id="name" ng-model="p.name" />
-                                </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="name">Name</label>
+                            <div class="col-sm-5">
+                                <input type="text" id="name" ng-model="p.name" class="form-control" />
                             </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="inputEmail">Include Symbols</label>
-                                <div class="controls">
-                                    <toggle-button ng-model="p.includeSymbols" db-model="p.includeSymbols"></toggle-button>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="inputPassword">Case Sensitive</label>
-                                <div class="controls">
-                                    <toggle-button ng-model="p.caseSensitive"></toggle-button>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="inputPassword">Use Pin Number</label>
-                                <div class="controls">
-                                    <toggle-button ng-model="p.usePinNumber" ng-change="pinOptionChanged(p)"></toggle-button>
-                                </div>
-                            </div>
-
-                            <div class="control-group" ng-show="p.usePinNumber">
-                                <label class="control-label" for="inputPassword">Pin Number</label>
-                                <div class="controls pinNumber">
-                                    <select ng-model="p.pin1">
-                                        <option>0</option>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                        <option>6</option>
-                                        <option>7</option>
-                                        <option>8</option>
-                                        <option>9</option>
-                                    </select>
-                                    <select ng-model="p.pin2">
-                                        <option>0</option>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                        <option>6</option>
-                                        <option>7</option>
-                                        <option>8</option>
-                                        <option>9</option>
-                                    </select>
-                                    <select ng-model="p.pin3">
-                                        <option>0</option>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                        <option>6</option>
-                                        <option>7</option>
-                                        <option>8</option>
-                                        <option>9</option>
-                                    </select>
-                                    <select ng-model="p.pin4">
-                                        <option>0</option>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                        <option>6</option>
-                                        <option>7</option>
-                                        <option>8</option>
-                                        <option>9</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="passwordLength">Password Length</label>
-                                <div class="controls">
-                                    <input id="passwordLength" type="range" min="5" max="15" step="1" ng-model="p.passwordLength" data-bind="value: passwordLength" />
-                                    <span>{{p.passwordLength}}</span>
-                                </div>
-                            </div>
-
                         </div>
 
-                    </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="inputEmail">Include Symbols</label>
+                            <div class="col-sm-10">
+                                <toggle-button ng-model="p.includeSymbols" db-model="p.includeSymbols"></toggle-button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="inputPassword">Case Sensitive</label>
+                            <div class="col-sm-10">
+                                <toggle-button ng-model="p.caseSensitive"></toggle-button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="inputPassword">Use Pin Number</label>
+                            <div class="col-sm-10">
+                                <toggle-button ng-model="p.usePinNumber" ng-change="pinOptionChanged(p)"></toggle-button>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-show="p.usePinNumber">
+                            <label class="col-sm-2 control-label" for="inputPassword">Pin Number</label>
+                            <div class="col-sm-10 pinNumber">
+                                <select ng-model="p.pin1" class="form-control">
+                                    <option>0</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                </select>
+                                <select ng-model="p.pin2" class="form-control">
+                                    <option>0</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                </select>
+                                <select ng-model="p.pin3" class="form-control">
+                                    <option>0</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                </select>
+                                <select ng-model="p.pin4" class="form-control">
+                                    <option>0</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="passwordLength">Password Length</label>
+                            <div class="col-sm-5">
+                                <p class="form-control-static">
+                                    <input id="passwordLength" type="range" min="5" max="15" step="1" ng-model="p.passwordLength" data-bind="value: passwordLength" />
+                                </p>
+                            </div>
+                            <div class="col-sm-5">
+                                <p class="form-control-static">{{p.passwordLength}}</p>
+                            </div>
+                        </div>
+
+                    </form>
 
                 </div>
 
             </div>
 
             <div class="well">
-                <button type="button" class="btn btn-primary" ng-click="createProfile()">Add Profile</button>
-                <div class="form-horizontal pull-right">
-                    <div class="control-group">
-                        <label class="control-label" for="ddDefaultProfile">Default Profile</label>
-                        <div class="controls">
-                            <select ng-options="p.name for p in profiles" ng-model="defaultProfile"></select>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-primary" ng-click="createProfile()">Add Profile</button>
+                    </div>
+                    <div class="form-horizontal col-sm-6">
+                        <label class="control-label col-sm-6" for="ddDefaultProfile">Default Profile</label>
+                        <div class="col-sm-6">
+                            <select ng-options="p.name for p in profiles" ng-model="defaultProfile" class="form-control"></select>
                         </div>
                     </div>
                 </div>
@@ -180,27 +180,24 @@
 
         <hr />
 
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>Copying to Clipboard<small class="pull-right help-button" ng-click="showClipboardHelp = !showClipboardHelp"><span class="glyphicon glyphicon-question-sign"></span> help</small></h4>
 
-
-        <div>
-
-            <h4>Copying to Clipboard<small class="pull-right help-button" ng-click="showClipboardHelp = !showClipboardHelp"><i class="icon icon-question-sign"></i> help</small></h4>
-
-            <div class="alert alert-info" ng-show="showClipboardHelp">
-                <p>When selecting the 'copy' option, the password is automatically copied to the clipboard ready for pasting. It is recommended that this is automatically cleared after a set period of time.</p>
-            </div>
-            <div class="row">
-                <div class="span6">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" ng-model="clipboardSettings.enabled"> Enable Clipboard Clearing
-                        </label>
-                    </div>
+                <div class="alert alert-info" ng-show="showClipboardHelp">
+                    <p>When selecting the 'copy' option, the password is automatically copied to the clipboard ready for pasting. It is recommended that this is automatically cleared after a set period of time.</p>
                 </div>
-                <div class="span6">
-                    <div class="control-group">
-                        <label class="control-label" for="clipboardSeconds">Password remains in clipboard for:</label>
-                        <select ng-model="clipboardSettings.seconds" ng-disabled="!clipboardSettings.enabled">
+                <div>
+                    <div class="col-sm-4 form-group">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="clipboardSettings.enabled"> Enable Clipboard Clearing
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 form-group">
+                        <label for="clipboardSeconds">Password remains in clipboard for:</label>
+                        <select ng-model="clipboardSettings.seconds" ng-disabled="!clipboardSettings.enabled" class="form-control">
                             <option value="5">5 seconds</option>
                             <option value="10">10 seconds</option>
                             <option value="15">15 seconds</option>
@@ -211,50 +208,50 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <hr />
+        <hr />
 
-            <div>
-
-                <h4>Enter Key<small class="pull-right help-button" ng-click="showEnterKeyHelp = !showEnterKeyHelp"><i class="icon icon-question-sign"></i> help</small></h4>
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>Enter Key<small class="pull-right help-button" ng-click="showEnterKeyHelp = !showEnterKeyHelp"><span class="glyphicon glyphicon-question-sign"></span> help</small></h4>
 
                 <div class="alert alert-info" ng-show="showEnterKeyHelp">
                     <p>When entering a password, pressing enter can toggle events instead of pressing the relevant button.</p>
                 </div>
 
-                <div class="row">
-                    <div class="span6">
+                <div>
+                    <div class="col-sm-4 form-group">
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" id="enterKeyEnabled" ng-model="enterKeySettings.enabled" /> Enable Enter Key on Password Entry
                             </label>
                         </div>
                     </div>
-                    <div class="span6">
-                        <div class="control-group">
-                            <label class="control-label" for="enterKeyBehaviour">Enter key toggles action:</label>
-                            <div class="controls">
-                                <select id="enterKeyBehaviour" ng-model="enterKeySettings.behaviour" ng-disabled="!enterKeySettings.enabled">
-                                    <option value="R">Reveal</option>
-                                    <option value="C">Copy</option>
-                                    <option value="AR">Autofill/Reveal</option>
-                                    <option value="AC">Autofill/Copy</option>
-                                </select>
-                            </div>
+                    <div>
+                        <div class="col-sm-8 form-group">
+                            <label for="enterKeyBehaviour">Enter key toggles action:</label>
+                            <select id="enterKeyBehaviour" ng-model="enterKeySettings.behaviour" ng-disabled="!enterKeySettings.enabled" class="form-control">
+                                <option value="R">Reveal</option>
+                                <option value="C">Copy</option>
+                                <option value="AR">Autofill/Reveal</option>
+                                <option value="AC">Autofill/Copy</option>
+                            </select>
                         </div>
                     </div>
+
                 </div>
-
             </div>
-
         </div>
 
-        <div class="toggle-save" ng-show="changesMade">
-            <div class="container">
-                <button type="button" class="btn btn-success" ng-click="save()">Save</button>
-                Your changes have not yet been saved
-            </div>
+    </div>
+
+    <div class="toggle-save" ng-show="changesMade">
+        <div class="container">
+            <button type="button" class="btn btn-success" ng-click="save()">Save</button>
+            Your changes have not yet been saved
         </div>
     </div>
+
 </body>
 </html>
