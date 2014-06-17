@@ -20,7 +20,7 @@
 
 'use strict';
 
-angular.module('deadboltPasswordGeneratorApp.controllers', [])
+angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
     .controller('popupCtrl', function ($scope, settingsRepository, deadboltSettingsFactory, analyticsService) {
         $scope.placeHolders = ['rainforest book shop', 'black horse banking', 'dark blue social', 'bird song status update', 'grocery shopping'];
         $scope.placeHolderValue = 'e.g. ' + $scope.placeHolders[Math.floor((Math.random() * $scope.placeHolders.length))];
