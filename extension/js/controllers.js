@@ -164,7 +164,7 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
         // End Click Handlers
     })
 
-    .controller('settingsCtrl', function ($scope, settingsRepository, deadboltSettingsFactory) {
+    .controller('settingsCtrl', function ($scope, $modal, settingsRepository, deadboltSettingsFactory) {
 
         settingsRepository.getSettings(function (deadboltSettings) {
             $scope.$apply(function () {
@@ -177,8 +177,6 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
                 $scope.changesMade = false;
             });
         });
-
-        $scope.exporting = false;
 
         $scope.$watch('profiles', function() {
             $scope.changesMade = true;
@@ -246,35 +244,21 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
         };
 
         $scope.exportSettings = function () {
-            document.getElementById('exportDataModal').modal('show');
+            var modalInstance = $modal.open({
+                templateUrl: 'templates/export.htm',
+                controller: 'exportCtrl',
+                size: 'lg'
+            });
         };
 
     })
 
-    .controller('importExportCtrl', function ($scope, settingsRepository, deadboltSettingsFactory) {
+    .controller('exportCtrl', function ($scope, $modalInstance, settingsRepository, deadboltSettingsFactory) {
         
         settingsRepository.getSettings(function (deadboltSettings) {
             $scope.$apply(function () {
-                $scope.savedSettings = deadboltSettings;
+                $scope.deadboltSettingsString = window.btoa(angular.toJson(deadboltSettings));
             });
         });
-
-        $scope.exportSettings = function () {
-            console.log('exporting');
-            $scope.deadboltSettings = window.btoa(angular.toJson($scope.savedSettings));
-        };
-
-        $scope.exportSettings = function () {
-            console.log('importing');
-            $scope.savedSettings = window.atob(angular.toJson($scope.deadboltSettings));
-        };
-
-        $scope.exportErrorHandler = function () {
-            console.log('something not right here ...');
-        };
-
-        $scope.exportFinished = function () {
-            console.log('settings exported successfully.');
-        };
 
      });
