@@ -260,5 +260,9 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
                 $scope.deadboltSettingsString = window.btoa(angular.toJson(deadboltSettings));
             });
         });
+        
+        $scope.close = function () {
+            $modalInstance.dismiss('close');
+        };
 
      });
