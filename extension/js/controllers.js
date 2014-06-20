@@ -173,26 +173,22 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
                 $scope.clipboardSettings = deadboltSettings.clipboardSettings;
                 $scope.enterKeySettings = deadboltSettings.enterKeySettings;
             });
-            $scope.$apply(function () {
-                $scope.changesMade = false;
-            });
+            $scope.$watch('profiles', function () {
+                $scope.changesMade = true;
+            }, true);
+            $scope.$watch('defaultProfile', function (a, b) {
+                console.log('profilechanged');
+                console.log(a);
+                console.log(b);
+                $scope.changesMade = true;
+            }, true);
+            $scope.$watch('clipboardSettings', function () {
+                $scope.changesMade = true;
+            }, true);
+            $scope.$watch('enterKeySettings', function () {
+                $scope.changesMade = true;
+            }, true);
         });
-
-        $scope.$watch('profiles', function() {
-            $scope.changesMade = true;
-        }, true);
-
-        $scope.$watch('defaultProfile', function () {
-            $scope.changesMade = true;
-        }, true);
-
-        $scope.$watch('clipboardSettings', function () {
-            $scope.changesMade = true;
-        }, true);
-
-         $scope.$watch('enterKeySettings', function () {
-            $scope.changesMade = true;
-        }, true);
         
          $scope.createProfile = function () {
             var p = deadboltSettingsFactory.createDefaultProfile('Profile ' + ($scope.profiles.length + 1));
