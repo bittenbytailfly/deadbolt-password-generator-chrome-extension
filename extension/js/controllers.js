@@ -166,34 +166,49 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
 
     .controller('settingsCtrl', function ($scope, $modal, settingsRepository, deadboltSettingsFactory) {
 
-        settingsRepository.getSettings(function (deadboltSettings) {
-            $scope.$apply(function () {
-                $scope.profiles = deadboltSettings.simpleProfileList;
-                $scope.defaultProfile = deadboltSettingsFactory.findMatchingProfileByName($scope.profiles, deadboltSettings.defaultProfileName);
-                $scope.clipboardSettings = deadboltSettings.clipboardSettings;
-                $scope.enterKeySettings = deadboltSettings.enterKeySettings;
+        var changeWatchers = new Array();
+
+        $scope.loadSettings = function () {
+            settingsRepository.getSettings(function (deadboltSettings) {
+                $scope.$apply(function () {
+                    $scope.profiles = deadboltSettings.simpleProfileList;
+                    $scope.defaultProfile = deadboltSettingsFactory.findMatchingProfileByName($scope.profiles, deadboltSettings.defaultProfileName);
+                    $scope.clipboardSettings = deadboltSettings.clipboardSettings;
+                    $scope.enterKeySettings = deadboltSettings.enterKeySettings;
+                    $scope.activeTab = 0;
+                    $scope.changesMade = false;
+                    
+                    changeWatchers.push($scope.$watch('profiles', function (newVal, oldVal) {
+                        if (newVal !== oldVal) {
+                            $scope.changesMade = true;
+                        }
+                    }, true));
+                    changeWatchers.push($scope.$watch('defaultProfile', function (newVal, oldVal) {
+                        if (newVal !== oldVal) {
+                            $scope.changesMade = true;
+                        }
+                    }, true));
+                    changeWatchers.push($scope.$watch('clipboardSettings', function (newVal, oldVal) {
+                        if (newVal !== oldVal) {
+                            $scope.changesMade = true;
+                        }
+                    }, true));
+                    changeWatchers.push($scope.$watch('enterKeySettings', function (newVal, oldVal) {
+                        if (newVal !== oldVal) {
+                            $scope.changesMade = true;
+                        }
+                    }, true));
+                });
             });
-            $scope.$watch('profiles', function () {
-                $scope.changesMade = true;
-            }, true);
-            $scope.$watch('defaultProfile', function (a, b) {
-                $scope.changesMade = true;
-            }, true);
-            $scope.$watch('clipboardSettings', function () {
-                $scope.changesMade = true;
-            }, true);
-            $scope.$watch('enterKeySettings', function () {
-                $scope.changesMade = true;
-            }, true);
-        });
-        
-         $scope.createProfile = function () {
+        }
+
+        $scope.loadSettings();
+
+        $scope.createProfile = function () {
             var p = deadboltSettingsFactory.createDefaultProfile('Profile ' + ($scope.profiles.length + 1));
             $scope.profiles.push(p);
             $scope.activeTab = $scope.profiles.length - 1;
         };
-
-        $scope.activeTab = 0;
 
         $scope.setActiveTab = function (i) {
             $scope.activeTab = i;
@@ -225,6 +240,14 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
 
         $scope.saveComplete = function () {
             $scope.$apply(function() { $scope.changesMade = false });
+        };
+
+        $scope.cancel = function () {
+            angular.forEach(changeWatchers, function (watcher) {
+                watcher();
+            });
+            $scope.loadSettings();
+            $scope.changesMade = false;
         };
 
         $scope.pinOptionChanged = function (p) {
