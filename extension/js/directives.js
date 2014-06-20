@@ -65,6 +65,7 @@ angular.module('deadboltPasswordGeneratorApp.directives', [])
     }])
     .directive('dbEnter', [function () {
         return {
+            restrict: 'A',
             link: function (scope, elem, attrs) {
                 elem.bind("keydown keypress", function (event) {
                     if(event.which === 13) {
@@ -73,6 +74,22 @@ angular.module('deadboltPasswordGeneratorApp.directives', [])
                         });
                         event.preventDefault();
                     }
+                });
+            }
+        };
+    }])
+    .directive('dbSelected', ['$timeout', function ($timeout) {
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            scope: {
+                ngModel: '='
+            },
+            link: function (scope, elem, attrs) {
+                scope.$watch('ngModel', function () {
+                    $timeout(function () {
+                        elem[0].select();
+                    });
                 });
             }
         };

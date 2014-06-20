@@ -177,9 +177,6 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
                 $scope.changesMade = true;
             }, true);
             $scope.$watch('defaultProfile', function (a, b) {
-                console.log('profilechanged');
-                console.log(a);
-                console.log(b);
                 $scope.changesMade = true;
             }, true);
             $scope.$watch('clipboardSettings', function () {
@@ -251,6 +248,8 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
 
     .controller('exportCtrl', function ($scope, $modalInstance, settingsRepository, deadboltSettingsFactory) {
         
+        $scope.deadboltSettingsString = '';
+
         settingsRepository.getSettings(function (deadboltSettings) {
             $scope.$apply(function () {
                 $scope.deadboltSettingsString = window.btoa(angular.toJson(deadboltSettings));

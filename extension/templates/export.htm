@@ -22,8 +22,11 @@
 </div>
 <div class="modal-body">
     <p>Your settings are displayed in the text box below - copy and paste the data into a file as a backup.</p>
-    <textarea class="form-control" rows="10" ng-model="deadboltSettingsString"></textarea>
+    <textarea class="form-control" rows="10" ng-model="deadboltSettingsString" db-selected></textarea>
+    <button class="btn btn-primary" ng-click="copyToClipboard()">Copy to Clipboard</button>
 </div>
 <div class="modal-footer">
     <button class="btn btn-warning" ng-click="close()">Close</button>
+    <button class="btn btn-warning" ng-click="deadboltSettingsString = 'test'">Close</button>
+    <button class="btn btn-warning" ng-click="deadboltSettingsString = 'tessst'">Close</button>
 </div>
