@@ -138,7 +138,7 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
                 }
             };
             chrome.runtime.sendMessage(message, function () {
-                $scope.$apply(function() {
+                $scope.$apply(function () {
                     $scope.revealMode = 'copied';
                     analyticsService.postEvent('Copied', $scope.selectedProfile);
                 });
@@ -168,41 +168,41 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
 
         var changeWatchers = new Array();
 
-        $scope.loadSettings = function () {
-            settingsRepository.getSettings(function (deadboltSettings) {
-                $scope.$apply(function () {
-                    $scope.profiles = deadboltSettings.simpleProfileList;
-                    $scope.defaultProfile = deadboltSettingsFactory.findMatchingProfileByName($scope.profiles, deadboltSettings.defaultProfileName);
-                    $scope.clipboardSettings = deadboltSettings.clipboardSettings;
-                    $scope.enterKeySettings = deadboltSettings.enterKeySettings;
-                    $scope.activeTab = 0;
-                    $scope.changesMade = false;
-                    
-                    changeWatchers.push($scope.$watch('profiles', function (newVal, oldVal) {
-                        if (newVal !== oldVal) {
-                            $scope.changesMade = true;
-                        }
-                    }, true));
-                    changeWatchers.push($scope.$watch('defaultProfile', function (newVal, oldVal) {
-                        if (newVal !== oldVal) {
-                            $scope.changesMade = true;
-                        }
-                    }, true));
-                    changeWatchers.push($scope.$watch('clipboardSettings', function (newVal, oldVal) {
-                        if (newVal !== oldVal) {
-                            $scope.changesMade = true;
-                        }
-                    }, true));
-                    changeWatchers.push($scope.$watch('enterKeySettings', function (newVal, oldVal) {
-                        if (newVal !== oldVal) {
-                            $scope.changesMade = true;
-                        }
-                    }, true));
-                });
-            });
-        }
+        settingsRepository.getSettings(function (deadboltSettings) {
+            $scope.$apply(function() {
+                applySettings(deadboltSettings);
+                $scope.changesMade = false;
 
-        $scope.loadSettings();
+                changeWatchers.push($scope.$watch('profiles', function (newVal, oldVal) {
+                    if (newVal !== oldVal) {
+                        $scope.changesMade = true;
+                    }
+                }, true));
+                changeWatchers.push($scope.$watch('defaultProfile', function (newVal, oldVal) {
+                    if (newVal !== oldVal) {
+                        $scope.changesMade = true;
+                    }
+                }, true));
+                changeWatchers.push($scope.$watch('clipboardSettings', function (newVal, oldVal) {
+                    if (newVal !== oldVal) {
+                        $scope.changesMade = true;
+                    }
+                }, true));
+                changeWatchers.push($scope.$watch('enterKeySettings', function (newVal, oldVal) {
+                    if (newVal !== oldVal) {
+                        $scope.changesMade = true;
+                    }
+                }, true));
+            });
+        });
+
+        var applySettings = function (deadboltSettings) {
+            $scope.profiles = deadboltSettings.simpleProfileList;
+            $scope.defaultProfile = deadboltSettingsFactory.findMatchingProfileByName($scope.profiles, deadboltSettings.defaultProfileName);
+            $scope.clipboardSettings = deadboltSettings.clipboardSettings;
+            $scope.enterKeySettings = deadboltSettings.enterKeySettings;
+            $scope.activeTab = 0;
+        };
 
         $scope.createProfile = function () {
             var p = deadboltSettingsFactory.createDefaultProfile('Profile ' + ($scope.profiles.length + 1));
@@ -239,7 +239,7 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
         };
 
         $scope.saveComplete = function () {
-            $scope.$apply(function() { $scope.changesMade = false });
+            $scope.$apply(function () { $scope.changesMade = false });
         };
 
         $scope.cancel = function () {
@@ -267,10 +267,22 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
             });
         };
 
+        $scope.importSettings = function () {
+            var modalInstance = $modal.open({
+                templateUrl: 'templates/import.htm',
+                controller: 'importCtrl',
+                size: 'lg'
+            });
+
+            modalInstance.result.then(function (deadboltSettings) {
+                applySettings(deadboltSettings);
+            });
+        };
+
     })
 
     .controller('exportCtrl', function ($scope, $modalInstance, settingsRepository, deadboltSettingsFactory) {
-        
+
         $scope.deadboltSettingsString = '';
 
         settingsRepository.getSettings(function (deadboltSettings) {
@@ -278,9 +290,23 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
                 $scope.deadboltSettingsString = window.btoa(angular.toJson(deadboltSettings));
             });
         });
-        
+
         $scope.close = function () {
             $modalInstance.dismiss('close');
         };
+
+    })
+
+     .controller('importCtrl', function ($scope, $modalInstance, settingsRepository, deadboltSettingsFactory) {
+
+         $scope.deadboltSettingsString = 'asdasd';
+
+         $scope.cancel = function () {
+             $modalInstance.dismiss('cancel');
+         };
+
+         $scope.import = function () {
+             $modalInstance.close(angular.fromJson(window.atob($scope.deadboltSettingsString)));
+         };
 
      });
