@@ -38,10 +38,12 @@
 <body ng-controller="settingsCtrl">
     <div class="titleBar">
         <div class="container">
+            <div class="pull-right import-export">
+                <button class="btn btn-default" ng-disabled="changesMade" ng-click="exportSettings()">Export Settings</button>
+                <button class="btn btn-default" ng-click="importSettings()">Import Settings</button>
+            </div>
             <h1><span>Deadbolt Password Generator</span></h1>
         </div>
-        <button class="btn btn-default" ng-click="exportSettings()">Export Settings</button>
-        <button class="btn btn-default" ng-click="importSettings()">Import Settings</button>
     </div>
     <div class="container">
 

@@ -68,28 +68,12 @@ angular.module('deadboltPasswordGeneratorApp.directives', [])
             restrict: 'A',
             link: function (scope, elem, attrs) {
                 elem.bind("keydown keypress", function (event) {
-                    if(event.which === 13) {
-                        scope.$apply(function (){
+                    if (event.which === 13) {
+                        scope.$apply(function () {
                             scope.$eval(attrs.dbEnter);
                         });
                         event.preventDefault();
                     }
-                });
-            }
-        };
-    }])
-    .directive('dbSelected', ['$timeout', function ($timeout) {
-        return {
-            restrict: 'A',
-            require: 'ngModel',
-            scope: {
-                ngModel: '='
-            },
-            link: function (scope, elem, attrs) {
-                scope.$watch('ngModel', function () {
-                    $timeout(function () {
-                        elem[0].select();
-                    });
                 });
             }
         };
@@ -116,6 +100,22 @@ angular.module('deadboltPasswordGeneratorApp.directives', [])
                     if (scope.ngChange) {
                         scope.ngChange();
                     }
+                });
+            }
+        };
+    }])
+    .directive('dbFileChange', [function () {
+        return {
+            retrict: 'A',
+            scope: {
+                callback: '=dbFileChange'
+            },
+            link: function (scope, elem, attr) {
+                elem.bind('change', function (e) {
+                    scope.$apply(function () {
+                        var file = e.target.files[0];
+                        scope.callback(file);
+                    });
                 });
             }
         };
