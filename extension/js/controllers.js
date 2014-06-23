@@ -21,6 +21,15 @@
 'use strict';
 
 angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
+
+    .config( [
+        '$compileProvider',
+        function( $compileProvider )
+        {   
+            $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|blob):/);
+        }
+    ])
+
     .controller('popupCtrl', function ($scope, settingsRepository, deadboltSettingsFactory, analyticsService) {
         $scope.placeHolders = ['rainforest book shop', 'black horse banking', 'dark blue social', 'bird song status update', 'grocery shopping'];
         $scope.placeHolderValue = 'e.g. ' + $scope.placeHolders[Math.floor((Math.random() * $scope.placeHolders.length))];
@@ -283,15 +292,18 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
 
     .controller('exportCtrl', function ($scope, $modalInstance, settingsRepository, deadboltSettingsFactory) {
 
-        $scope.deadboltSettingsString = '';
+        var deadboltSettingsString = '';
 
         settingsRepository.getSettings(function (deadboltSettings) {
             $scope.$apply(function () {
-                $scope.deadboltSettingsString = window.btoa(angular.toJson(deadboltSettings));
+                deadboltSettingsString = window.btoa(angular.toJson(deadboltSettings));
+                var blob = new Blob([deadboltSettingsString], { type: "octet/stream" });
+                $scope.downloadUrl = URL.createObjectURL(blob);
             });
         });
 
         $scope.close = function () {
+            URL.revokeObjectURL($scope.downloadUrl);
             $modalInstance.dismiss('close');
         };
 
