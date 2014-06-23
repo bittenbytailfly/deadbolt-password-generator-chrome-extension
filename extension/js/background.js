@@ -18,22 +18,33 @@
     <http://www.gnu.org/licenses/>.
  */
 
-chrome.runtime.onMessage.addListener(
-  function (request, sender, sendResponse) {
-      var cmd = request.command;
-      switch (cmd) {
-          case 'copyPasswordToClipboard':
-              var password = request.data.password;
-              var timerEnabled = request.data.timerEnabled;
-              var secondsToCopy = request.data.secondsToCopy;
-              setClipboardValue(password);
-              if (timerEnabled) {
-                  decreaseCounter(secondsToCopy);
-              }
-              sendResponse();
-              break;
-      }
-  });
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    var cmd = request.command;
+    switch (cmd) {
+        case 'copyPasswordToClipboard':
+            var password = request.data.password;
+            var timerEnabled = request.data.timerEnabled;
+            var secondsToCopy = request.data.secondsToCopy;
+            setClipboardValue(password);
+            if (timerEnabled) {
+                decreaseCounter(secondsToCopy);
+            }
+            sendResponse();
+            break;
+    }
+});
+
+chrome.runtime.onInstalled.addListener(function (details) {
+    switch (details.reason) {
+        case 'install':
+            break;
+        case 'update':
+            chrome.tabs.create({
+                url: 'whats-new.htm'
+            });
+            break;
+    }
+});
 
 function setClipboardValue(text) {
     var txt = document.createElement('textarea');
