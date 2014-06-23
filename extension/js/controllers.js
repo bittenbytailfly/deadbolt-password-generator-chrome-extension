@@ -177,33 +177,37 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
 
         var changeWatchers = new Array();
 
-        settingsRepository.getSettings(function (deadboltSettings) {
-            $scope.$apply(function() {
-                applySettings(deadboltSettings);
-                $scope.changesMade = false;
+        var loadSettings = function () {
+            settingsRepository.getSettings(function (deadboltSettings) {
+                $scope.$apply(function () {
+                    applySettings(deadboltSettings);
+                    $scope.changesMade = false;
 
-                changeWatchers.push($scope.$watch('profiles', function (newVal, oldVal) {
-                    if (newVal !== oldVal) {
-                        $scope.changesMade = true;
-                    }
-                }, true));
-                changeWatchers.push($scope.$watch('defaultProfile', function (newVal, oldVal) {
-                    if (newVal !== oldVal) {
-                        $scope.changesMade = true;
-                    }
-                }, true));
-                changeWatchers.push($scope.$watch('clipboardSettings', function (newVal, oldVal) {
-                    if (newVal !== oldVal) {
-                        $scope.changesMade = true;
-                    }
-                }, true));
-                changeWatchers.push($scope.$watch('enterKeySettings', function (newVal, oldVal) {
-                    if (newVal !== oldVal) {
-                        $scope.changesMade = true;
-                    }
-                }, true));
+                    changeWatchers.push($scope.$watch('profiles', function (newVal, oldVal) {
+                        if (newVal !== oldVal) {
+                            $scope.changesMade = true;
+                        }
+                    }, true));
+                    changeWatchers.push($scope.$watch('defaultProfile', function (newVal, oldVal) {
+                        if (newVal !== oldVal) {
+                            $scope.changesMade = true;
+                        }
+                    }, true));
+                    changeWatchers.push($scope.$watch('clipboardSettings', function (newVal, oldVal) {
+                        if (newVal !== oldVal) {
+                            $scope.changesMade = true;
+                        }
+                    }, true));
+                    changeWatchers.push($scope.$watch('enterKeySettings', function (newVal, oldVal) {
+                        if (newVal !== oldVal) {
+                            $scope.changesMade = true;
+                        }
+                    }, true));
+                });
             });
-        });
+        };
+
+        loadSettings();
 
         var applySettings = function (deadboltSettings) {
             $scope.profiles = deadboltSettings.simpleProfileList;
@@ -255,7 +259,7 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
             angular.forEach(changeWatchers, function (watcher) {
                 watcher();
             });
-            $scope.loadSettings();
+            loadSettings();
             $scope.changesMade = false;
         };
 
@@ -311,14 +315,41 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
 
      .controller('importCtrl', function ($scope, $modalInstance, settingsRepository, deadboltSettingsFactory) {
 
-         $scope.deadboltSettingsString = 'asdasd';
+         $scope.importAttempted = false;
+
+         $scope.$watch('importFileContents', function (newVal, oldVal) {
+             if (newVal !== oldVal) {
+                 try {
+                     angular.fromJson(atob(newVal));
+                     $scope.importable = true;
+                 } catch (e) {
+                 }
+             }
+         });
+
+         $scope.fileChanged = function (file) {
+             $scope.importAttempted = true;
+             $scope.importable = false;
+             if (file.type == 'text/plain') {
+                 var reader = new FileReader();
+                 reader.addEventListener('load', function (e) {
+                     $scope.$apply(function () {
+                         $scope.importFileContents = e.target.result;
+                     });
+                 });
+                 reader.readAsText(file);
+             }
+             else {
+                 $scope.importFileContents = "";
+             }
+         };
 
          $scope.cancel = function () {
              $modalInstance.dismiss('cancel');
          };
 
          $scope.import = function () {
-             $modalInstance.close(angular.fromJson(window.atob($scope.deadboltSettingsString)));
+             $modalInstance.close(angular.fromJson(window.atob($scope.importFileContents)));
          };
 
      });

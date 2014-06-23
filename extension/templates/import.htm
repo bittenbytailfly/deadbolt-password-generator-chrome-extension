@@ -1,4 +1,4 @@
-<!--
+﻿<!--
     Copyright 2014 Ed Carter
 
     This file is part of Deadbolt Password Generator.
@@ -21,14 +21,15 @@
     <h3 class="modal-title">Import Data</h3>
 </div>
 <div class="modal-body">
-    <p>Paste in your exported settings below:</p>
+    <p>Import your settings using the file selector below. Your imported settings will not overwrite your existing settings until you save them, and you will have a chance to cancel them if necessary.</p>
     <form role="form">
         <div class="form-group">
-            <textarea class="form-control" rows="10" ng-model="$parent.deadboltSettingsString"></textarea>
+            <input type="file" db-file-change="fileChanged" />
         </div>
     </form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="import()">Import</button>
+    <p class="pull-left error" ng-show="importAttempted && !importable">Selected file is not a valid settings file.</p>
+    <a class="btn btn-primary" ng-click="import()" ng-disabled="!importable">Import</a>
     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </div>

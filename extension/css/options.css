@@ -66,3 +66,15 @@ body { padding-bottom: 100px; }
     margin: 0;
     padding: 0;
 }
+
+.error {
+    color: #b94a48;
+}
+
+.disabled {
+    cursor: not-allowed;
+}
+
+.import-export {
+    padding-top: 20px;
+}
