@@ -27,6 +27,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             var secondsToCopy = request.data.secondsToCopy;
             setClipboardValue(password);
             if (timerEnabled) {
+                clearTimeout(clipboardCounter);
                 decreaseCounter(secondsToCopy);
             }
             sendResponse();
@@ -55,13 +56,15 @@ function setClipboardValue(text) {
     document.body.removeChild(txt);
 }
 
+var clipboardCounter;
+
 function decreaseCounter(counter) {
     var displayNumber = '0' + counter;
     displayNumber = displayNumber.substr(displayNumber.length - 2);
     chrome.browserAction.setBadgeText({ text: '' + displayNumber });
     counter--;
     if (counter >= 0) {
-        setTimeout(function() { decreaseCounter(counter); }, 1000);
+        clipboardCounter = setTimeout(function () { decreaseCounter(counter); }, 1000);
     }
     else {
         setClipboardValue(' ');

@@ -1,9 +1,76 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!--
+    Copyright 2012, 2014 Ed Carter
+
+    This file is part of Deadbolt Password Generator.
+
+    Deadbolt Password Generator is free software: you can redistribute
+    it and/or modify it under the terms of the GNU General Public
+    License as published by the Free Software Foundation, either
+    version 3 of the License, or (at your option) any later version.
+
+    Deadbolt Password Generator is distributed in the hope that it
+    will be useful, but WITHOUT ANY WARRANTY; without even the implied
+    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Deadbolt Password Generator.  If not, see
+    <http://www.gnu.org/licenses/>.
+ -->
+<!DOCTYPE html>
+<html ng-app="deadboltPasswordGeneratorApp" ng-csp>
 <head>
-    <title></title>
+    <title>Deadbolt</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="css/options.css" rel="stylesheet" media="screen" />
+    <link href="css/whats-new.css" rel="stylesheet" />
+    <link href="css/angular-csp.css" rel="stylesheet" />
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-animate.min.js"></script>
+    <script src="js/angular.ui.bootstrap.min.js"></script>
+    <script src="js/deadbolt.js"></script>
+    <script src="js/tracking.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/directives.js"></script>
 </head>
-<body>
-    <h1>Something new here ...</h1>
+<body ng-controller="settingsCtrl">
+    <div class="titleBar">
+        <div class="container">
+            <div class="pull-right">
+                <h2>Deadbolt has updated to version 1.4</h2>
+            </div>
+            <h1><span>Deadbolt Password Generator</span></h1>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="row">
+            
+            <div class="col-md-6">
+                <h3>New: Import/Export Settings</h3>
+                <p>if you are signed in to Chrome using your google account, your settings are automatically synced to your account across all instances of Chrome that you use. if you are not signed in then the settings will only exist locally on that instance of Chrome.</p>
+
+                <p>It is now possible to import and export Deadbolt settings, and you should consider doing this for the following reasons:</p>
+
+                <ul>
+                    <li>It enables you to copy your settings onto a computer that you are not signed in to (e.g. a work computer).</li>
+                    <li>If you ever removed the extension, but decided to add it again at a later date you can simply import your existingn settings.</li>
+                    <li>As with all electronic data, you should always have a backup, just in case.</li>
+                </ul>
+
+                <p>It only takes a few seconds, and you can find the export button on the top right hand side of the <a href="options.htm" target="_blank">settings page</a>.</p>
+            </div>
+
+            <div class="col-md-6">
+                <img src="img/deadbolt-1-4.png" class="img-responsive" />
+            </div>
+
+        </div>
+
+    </div>
+
 </body>
 </html>
