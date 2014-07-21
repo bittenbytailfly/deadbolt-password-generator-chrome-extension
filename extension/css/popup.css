@@ -153,20 +153,20 @@ h1
     margin: 15px 0;
 }
 
- .animate-fade
- {
+.animate-fade
+{
     transition:all linear .3s;
     position: absolute;
     width: 100%;
     opacity:1;
-    left: 0;transform:  skew(40deg,40deg);
- }
+    left: 0;
+}
 
-  .animate-fade.ng-hide
- {
-      transition:all linear 0.3s;transform:  skew(40deg,40deg);
+.animate-fade.ng-hide
+{
+    transition:all linear 0.3s;
     opacity:0;
- }
+}
 
 .flipped {
     -webkit-transform: rotateX(180deg);
