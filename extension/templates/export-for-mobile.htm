@@ -26,9 +26,14 @@
             <p>
                 From the mobile app, select 'Import Profiles' from the profiles tab, and then use your phone's camera to scan the QR code on the right.
             </p>
+            <p>
+                Imported profiles will replace any profiles already stored on the mobile app.
+            </p>
         </div>
         <div class="col-xs-6">
-            <qr text="{{ qrProfiles }}" size="400"></qr>
+            <div ng-if="qrReady">
+                <qr text="qrProfiles" size="350" image="true"></qr>
+            </div>
         </div>
     </div>
 </div>

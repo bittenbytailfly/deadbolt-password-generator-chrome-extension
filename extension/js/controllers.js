@@ -305,28 +305,31 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap', 'ja.
     .controller('exportForMobileCtrl', function ($scope, $modalInstance, settingsRepository, deadboltSettingsFactory) {
 
         $scope.qrProfiles = '';
+        $scope.qrReady = false;
 
         settingsRepository.getSettings(function (deadboltSettings) {
             $scope.$apply(function () {
                 var counter = 0;
                 var qrProfileArray = new Array();
                 var defaultProfile = 0;
-                angular.forEach(deadboltSettings.simpleProfileList, function(p) {
+                angular.forEach(deadboltSettings.simpleProfileList, function (p) {
                     var pinNumber = p.pin1 + p.pin2 + p.pin3 + p.pin4;
                     qrProfileArray.push(
-                        p.name.replace('|','') +
-                        p.includeSymbols ? '1' : '0' +
-                        p.caseSensitive ? '1' : '0' +
-                        p.passwordLength < 10 ? '0' : '' +
+                        p.name.replace('|','') + ' ' +
+                        (p.includeSymbols ? '1' : '0') +
+                        (p.caseSensitive ? '1' : '0') +
+                        (p.passwordLength < 10 ? '0' : '') +
                         p.passwordLength +
-                        pinNumber = '0000' ? '' : pinNumber
+                        (pinNumber = '0000' ? '' : pinNumber)
                     );
-                    if (profile.name == profile.defaultProfileName) {
+                    console.log(p.name + ':' + deadboltSettings.defaultProfileName);
+                    if (p.name == deadboltSettings.defaultProfileName) {
                         defaultProfile = counter;
                     }
                     counter++;
                 });
-                $scope.qrProfiles = defaultProfile + qrProfileArray.join('|');
+                $scope.qrProfiles = defaultProfile + "|" + qrProfileArray.join('|');
+                $scope.qrReady = true;
             });
         });
 
