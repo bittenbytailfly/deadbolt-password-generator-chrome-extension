@@ -314,15 +314,16 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap', 'ja.
                 var defaultProfile = 0;
                 angular.forEach(deadboltSettings.simpleProfileList, function (p) {
                     var pinNumber = p.pin1 + p.pin2 + p.pin3 + p.pin4;
+                    console.log(pinNumber);
                     qrProfileArray.push(
                         p.name.replace('|','') + ' ' +
                         (p.includeSymbols ? '1' : '0') +
                         (p.caseSensitive ? '1' : '0') +
                         (p.passwordLength < 10 ? '0' : '') +
                         p.passwordLength +
-                        (pinNumber = '0000' ? '' : pinNumber)
+                        (pinNumber == '0000' ? '' : pinNumber)
                     );
-                    console.log(p.name + ':' + deadboltSettings.defaultProfileName);
+                    
                     if (p.name == deadboltSettings.defaultProfileName) {
                         defaultProfile = counter;
                     }
