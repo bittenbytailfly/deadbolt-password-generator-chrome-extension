@@ -40,6 +40,9 @@ chrome.runtime.onInstalled.addListener(function (details) {
         case 'install':
             break;
         case 'update':
+            chrome.tabs.create({
+                url: 'whats-new.htm'
+            });
             break;
     }
 });
