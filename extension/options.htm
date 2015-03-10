@@ -29,6 +29,8 @@
     <script src="js/angular.ui.bootstrap.min.js"></script>
     <script src="js/deadbolt.js"></script>
     <script src="js/tracking.js"></script>
+    <script src="js/qrcode.js"></script>
+    <script src="js/angular-qr.min.js"></script>
     <script src="js/app.js"></script>
     <script src="js/services.js"></script>
     <script src="js/filters.js"></script>
@@ -39,8 +41,9 @@
     <div class="titleBar">
         <div class="container">
             <div class="pull-right import-export">
-                <button class="btn btn-default" ng-disabled="changesMade" ng-click="exportSettings()">Export Settings</button>
-                <button class="btn btn-default" ng-click="importSettings()">Import Settings</button>
+                <button class="btn btn-default" ng-disabled="changesMade" ng-click="exportForMobile()"><span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span> Export For Mobile</button>
+                <button class="btn btn-default" ng-disabled="changesMade" ng-click="exportSettings()"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export Settings</button>
+                <button class="btn btn-default" ng-click="importSettings()"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import Settings</button>
             </div>
             <h1><span>Deadbolt Password Generator</span></h1>
         </div>
@@ -50,7 +53,7 @@
         <div>
             <h4>Profiles<small class="pull-right help-button" ng-click="showProfileHelp = !showProfileHelp"><span class="glyphicon glyphicon-question-sign"></span> help</small></h4>
             <div class="alert alert-info" ng-show="showProfileHelp">
-                <p>Profiles allow you to configure how the final password will be output, for example by setting length or whether it includes special characters (e.g. '£$^!'). An optional PIN can be set to differentiate your passwords further, although passwords are just as strong without.</p>
+                <p>Profiles allow you to configure how the final password will be output, for example by setting length or whether it includes special characters (e.g. 'ï¿½$^!'). An optional PIN can be set to differentiate your passwords further, although passwords are just as strong without.</p>
             </div>
 
             <ul id="profileTabs" class="nav nav-tabs">

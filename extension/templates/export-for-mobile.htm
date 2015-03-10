@@ -1,0 +1,45 @@
+<!--
+    Copyright 2015 Ed Carter
+
+    This file is part of Deadbolt Password Generator.
+
+    Deadbolt Password Generator is free software: you can redistribute
+    it and/or modify it under the terms of the GNU General Public
+    License as published by the Free Software Foundation, either
+    version 3 of the License, or (at your option) any later version.
+
+    Deadbolt Password Generator is distributed in the hope that it
+    will be useful, but WITHOUT ANY WARRANTY; without even the implied
+    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Deadbolt Password Generator.  If not, see
+    <http://www.gnu.org/licenses/>.
+ -->
+<div class="modal-header">
+    <h3 class="modal-title">Export For Mobile</h3>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-xs-6"> 
+            <p>
+                From the mobile app, press the 'Import Profiles' icon, then use your phone's camera to scan the QR code on the right.
+            </p>
+            <p>
+                Imported profiles will replace any profiles already stored on the mobile app.
+            </p>
+            <p style="padding-top: 1em;">
+                <img class="img-responsive" src="/img/profile-import-mobile.png" style="border: 1px solid #ccc;"/>
+            </p>
+        </div>
+        <div class="col-xs-6">
+            <div ng-if="qrReady">
+                <qr text="qrProfiles" size="350" image="true"></qr>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" ng-click="close()">Close</button>
+</div>

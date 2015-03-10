@@ -20,7 +20,7 @@
 
 'use strict';
 
-angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
+angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap', 'ja.qr'])
 
     .config( [
         '$compileProvider',
@@ -272,6 +272,14 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
             }
         };
 
+        $scope.exportForMobile = function() {
+            var modalInstance = $modal.open({
+                templateUrl: 'templates/export-for-mobile.htm',
+                controller: 'exportForMobileCtrl',
+                size: 'lg'
+            });
+        };
+
         $scope.exportSettings = function () {
             var modalInstance = $modal.open({
                 templateUrl: 'templates/export.htm',
@@ -290,6 +298,44 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap'])
             modalInstance.result.then(function (deadboltSettings) {
                 applySettings(deadboltSettings);
             });
+        };
+
+    })
+
+    .controller('exportForMobileCtrl', function ($scope, $modalInstance, settingsRepository, deadboltSettingsFactory) {
+
+        $scope.qrProfiles = '';
+        $scope.qrReady = false;
+
+        settingsRepository.getSettings(function (deadboltSettings) {
+            $scope.$apply(function () {
+                var counter = 0;
+                var qrProfileArray = new Array();
+                var defaultProfile = 0;
+                angular.forEach(deadboltSettings.simpleProfileList, function (p) {
+                    var pinNumber = p.pin1 + p.pin2 + p.pin3 + p.pin4;
+                    console.log(pinNumber);
+                    qrProfileArray.push(
+                        p.name.replace('|','') + ' ' +
+                        (p.includeSymbols ? '1' : '0') +
+                        (p.caseSensitive ? '1' : '0') +
+                        (p.passwordLength < 10 ? '0' : '') +
+                        p.passwordLength +
+                        (pinNumber == '0000' ? '' : pinNumber)
+                    );
+                    
+                    if (p.name == deadboltSettings.defaultProfileName) {
+                        defaultProfile = counter;
+                    }
+                    counter++;
+                });
+                $scope.qrProfiles = defaultProfile + "|" + qrProfileArray.join('|');
+                $scope.qrReady = true;
+            });
+        });
+
+        $scope.close = function () {
+            $modalInstance.dismiss('close');
         };
 
     })
