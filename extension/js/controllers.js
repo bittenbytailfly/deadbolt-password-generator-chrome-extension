@@ -130,14 +130,24 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap', 'ja.
             }
         };
 
+        $scope.encodePassword = function () {
+            $scope.password = deadboltPasswordGenerator.encodePassword($scope.memorablePhrase, {
+                engineId: $scope.selectedProfile.engineId || 0,
+                pin: ($scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4),
+                includeSymbols: $scope.selectedProfile.includeSymbols,
+                caseSensitive: $scope.selectedProfile.caseSensitive,
+                passwodLength: $scope.selectedProfile.passwordLength
+            });
+        }
+
         $scope.revealPassword = function () {
             $scope.revealMode = 'revealed';
-            $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
+            $scope.encodePassword();
             analyticsService.postEvent('Revealed', $scope.selectedProfile);
         };
 
         $scope.copyPasswordToClipboard = function () {
-            $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
+            $scope.encodePassword();
             var message = {
                 command: 'copyPasswordToClipboard',
                 data: {
@@ -155,7 +165,7 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap', 'ja.
         };
 
         $scope.injectPassword = function () {
-            $scope.password = encodePassword($scope.memorablePhrase, $scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4, $scope.selectedProfile.includeSymbols, $scope.selectedProfile.caseSensitive, $scope.selectedProfile.passwordLength);
+            $scope.encodePassword();
             chrome.tabs.query({ active: true, lastFocusedWindow: true }, function (tabs) {
                 chrome.tabs.sendMessage(tabs[0].id, { command: 'inject', data: { password: $scope.password } }, function () {
                     $scope.$apply(function () {
@@ -216,6 +226,8 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap', 'ja.
             $scope.enterKeySettings = deadboltSettings.enterKeySettings;
             $scope.activeTab = 0;
         };
+
+        $scope.availableEngines = deadboltPasswordGenerator.getAvailableEngines();
 
         $scope.createProfile = function () {
             var p = deadboltSettingsFactory.createDefaultProfile('Profile ' + ($scope.profiles.length + 1));
@@ -314,7 +326,6 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap', 'ja.
                 var defaultProfile = 0;
                 angular.forEach(deadboltSettings.simpleProfileList, function (p) {
                     var pinNumber = p.pin1 + p.pin2 + p.pin3 + p.pin4;
-                    console.log(pinNumber);
                     qrProfileArray.push(
                         p.name.replace('|','') + ' ' +
                         (p.includeSymbols ? '1' : '0') +
@@ -329,7 +340,7 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap', 'ja.
                     }
                     counter++;
                 });
-                $scope.qrProfiles = defaultProfile + "|" + qrProfileArray.join('|');
+                $scope.qrProfiles = 'a' + defaultProfile + "|" + qrProfileArray.join('|');
                 $scope.qrReady = true;
             });
         });

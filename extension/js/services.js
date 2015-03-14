@@ -63,7 +63,8 @@ angular.module('deadboltPasswordGeneratorApp.services', [])
     .factory('analyticsService', function () {
         return {
             generateEventLabel: function (p) {
-                return 'Symbols:' + p.includeSymbols +
+                return 'EngineId' + p.engineId +
+                    '|Symbols:' + p.includeSymbols +
                     '|Length:' + p.passwordLength +
                     '|CaseSensitive:' + p.caseSensitive +
                     '|UsePin:' + p.usePinNumber;
@@ -98,8 +99,9 @@ angular.module('deadboltPasswordGeneratorApp.services', [])
                 this.enabled = enabled;
                 this.behaviour = behaviour;
             },
-	        simpleProfile: function (name, includeSymbols, caseSensitive, usePinNumber, pin1, pin2, pin3, pin4, passwordLength) {
-                this.name = name;
+	        simpleProfile: function (name, engineId, includeSymbols, caseSensitive, usePinNumber, pin1, pin2, pin3, pin4, passwordLength) {
+	            this.name = name;
+	            this.engineId = engineId;
                 this.includeSymbols = includeSymbols;
                 this.caseSensitive = caseSensitive;
                 this.usePinNumber = usePinNumber;
@@ -110,7 +112,7 @@ angular.module('deadboltPasswordGeneratorApp.services', [])
                 this.passwordLength = passwordLength;
             },
             createDefaultProfile: function (name) {
-                return new this.simpleProfile(name, true, true, false, '0', '0', '0', '0', 15);
+                return new this.simpleProfile(name, 1, true, true, false, '0', '0', '0', '0', 15);
             },
             findMatchingProfileByName: function (profiles, name) {
                 for (var i = 0; i < profiles.length; i++) {

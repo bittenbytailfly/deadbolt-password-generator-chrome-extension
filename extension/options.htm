@@ -53,7 +53,8 @@
         <div>
             <h4>Profiles<small class="pull-right help-button" ng-click="showProfileHelp = !showProfileHelp"><span class="glyphicon glyphicon-question-sign"></span> help</small></h4>
             <div class="alert alert-info" ng-show="showProfileHelp">
-                <p>Profiles allow you to configure how the final password will be output, for example by setting length or whether it includes special characters (e.g. '�$^!'). An optional PIN can be set to differentiate your passwords further, although passwords are just as strong without.</p>
+                <p>Profiles allow you to configure how the final password will be output, for example by setting length or whether it includes special characters (e.g. '%$^!'). An optional PIN can be set to differentiate your passwords further, although passwords are just as strong without.</p>
+                <p>Encoding algorithms are different ways in which your memorable phrase is turned into a strong password.</p>
             </div>
 
             <ul id="profileTabs" class="nav nav-tabs">
@@ -75,6 +76,13 @@
                             <label class="col-sm-2 control-label" for="name">Name</label>
                             <div class="col-sm-5">
                                 <input type="text" id="name" ng-model="p.name" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="name">Encoding Algorihm</label>
+                            <div class="col-sm-5">
+                                <select id="encodingAlgorithm" ng-model="p.engineId" class="form-control" ng-options="e.id as e.name for e in availableEngines"></select>
                             </div>
                         </div>
 
