@@ -134,7 +134,7 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap', 'ja.
             $scope.password = deadboltPasswordGenerator.encodePassword($scope.memorablePhrase, {
                 engineId: $scope.selectedProfile.engineId || 0,
                 pin: ($scope.selectedProfile.pin1 + $scope.selectedProfile.pin2 + $scope.selectedProfile.pin3 + $scope.selectedProfile.pin4),
-                includeSymbols: $scope.selectedProfile.includeSymbols,
+                useSpecial: $scope.selectedProfile.includeSymbols,
                 caseSensitive: $scope.selectedProfile.caseSensitive,
                 passwodLength: $scope.selectedProfile.passwordLength
             });
