@@ -128,7 +128,7 @@ var deadboltPasswordGenerator = (function() {
         }
     }, {
         id: 2,
-        name: 'Cammomile',
+        name: 'Camomile',
         process: function (passPhrase, options) {
             var multiplier = '66.9' + options.pin;
             return self.v2Encode(passPhrase, multiplier, options);
