@@ -327,7 +327,8 @@ angular.module('deadboltPasswordGeneratorApp.controllers', ['ui.bootstrap', 'ja.
                 angular.forEach(deadboltSettings.simpleProfileList, function (p) {
                     var pinNumber = p.pin1 + p.pin2 + p.pin3 + p.pin4;
                     qrProfileArray.push(
-                        p.name.replace('|','') + ' ' +
+                        p.name.replace('|', '') + ' ' +
+                        (p.engineId || 0) +
                         (p.includeSymbols ? '1' : '0') +
                         (p.caseSensitive ? '1' : '0') +
                         (p.passwordLength < 10 ? '0' : '') +

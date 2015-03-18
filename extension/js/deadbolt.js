@@ -123,14 +123,14 @@ var deadboltPasswordGenerator = (function() {
         id: 1,
         name: 'Earl Grey',
         process: function(passPhrase, options) {
-            var multiplier = '669.' + options.pin;
+            var multiplier = '6.69' + options.pin.split('').reverse().join('');
             return self.v2Encode(passPhrase, multiplier, options);
         }
     }, {
         id: 2,
         name: 'Cammomile',
-        process: function(passPhrase, options) {
-            var multiplier = '66.9' + options.pin.split('').reverse().join('');
+        process: function (passPhrase, options) {
+            var multiplier = '66.9' + options.pin;
             return self.v2Encode(passPhrase, multiplier, options);
         }
     });
